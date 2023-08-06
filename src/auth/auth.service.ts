@@ -33,10 +33,6 @@ export class AuthService {
             5
         );
 
-        console.log(
-            password + this.configService.get<string>('HASH_PASSWORD_SECRET')
-        );
-
         await this.prismaService.user.create({
             data: {
                 email,
@@ -80,7 +76,8 @@ export class AuthService {
             token,
             user: {
                 username: user.username,
-                email: user.email
+                email: user.email,
+                id: user.id
             }
         };
     }
