@@ -2,6 +2,9 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NewBuild } from './dto/newBuild.dto';
 import { GetAllBuild } from './dto/getAllBuild.dto';
+import { DeleteBuild } from './dto/deleteBuild.dto';
+import { AddLine } from './dto/addLine.dto';
+import { GetAllLines } from './dto/getAllLines.dto';
 
 @Injectable()
 export class BuildOrderService {
@@ -25,6 +28,8 @@ export class BuildOrderService {
             }
         });
 
+        await this.prismaService.$disconnect();
+
         return buildNameDto;
     }
 
@@ -37,6 +42,57 @@ export class BuildOrderService {
             }
         });
 
+        await this.prismaService.$disconnect();
+
         return buildNames;
+    }
+
+    async deleteBuild(deleteBuildDto: DeleteBuild) {
+        const { id } = deleteBuildDto;
+
+        try {
+            const deletedBuildName = await this.prismaService.buildName.delete({
+                where: {
+                    id: parseInt(id)
+                }
+            });
+            return deletedBuildName;
+        } catch (error) {
+            console.error('Error deleting BuildName:', error);
+            throw error;
+        } finally {
+            await this.prismaService.$disconnect();
+        }
+    }
+
+    async addLine(addLineDto: AddLine) {
+        const { desc, population, timer, buildName_id } = addLineDto;
+
+        console.log(addLineDto);
+
+        await this.prismaService.buildStep.create({
+            data: {
+                desc,
+                population: parseInt(population),
+                timer: parseInt(timer),
+                buildName_id: parseInt(buildName_id)
+            }
+        });
+        await this.prismaService.$disconnect();
+    }
+
+    async getAllLines(getAllLinesDto: GetAllLines) {
+        const { id } = getAllLinesDto;
+        console.log(getAllLinesDto);
+
+        const buildLines = await this.prismaService.buildStep.findMany({
+            where: {
+                buildName_id: parseInt(id)
+            }
+        });
+
+        await this.prismaService.$disconnect();
+
+        return buildLines;
     }
 }
