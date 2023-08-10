@@ -5,6 +5,8 @@ import { GetAllBuild } from './dto/getAllBuild.dto';
 import { DeleteBuild } from './dto/deleteBuild.dto';
 import { AddLine } from './dto/addLine.dto';
 import { GetAllLines } from './dto/getAllLines.dto';
+import { SwapLine } from './dto/swapLine.dto';
+import { DeleteLine } from './dto/deleteLine.dto';
 
 @Injectable()
 export class BuildOrderService {
@@ -94,5 +96,145 @@ export class BuildOrderService {
         await this.prismaService.$disconnect();
 
         return buildLines;
+    }
+
+    async swapLineUp(swapLineDto: SwapLine) {
+        const { table, id, buildId } = swapLineDto;
+
+        const previousId = await this.prismaService.buildStep.findFirst({
+            where: {
+                id: {
+                    lt: parseInt(id)
+                },
+                buildName_id: parseInt(buildId)
+            },
+            orderBy: {
+                id: 'desc'
+            }
+        });
+
+        try {
+            await this.prismaService.$transaction(async (tx) => {
+                const record1: number = await tx[table].findUnique({
+                    where: { id: parseInt(id) }
+                });
+
+                const record2: number = await tx[table].findUnique({
+                    where: { id: previousId.id }
+                });
+
+                if (!record1 || !record2) {
+                    throw new Error("L'un des IDs n'existe pas dans la table.");
+                }
+
+                const tempId = -1;
+                const tempId2 = -2;
+
+                await tx[table].update({
+                    where: { id: parseInt(id) },
+                    data: { id: tempId }
+                });
+
+                await tx[table].update({
+                    where: { id: previousId.id },
+                    data: { id: tempId2 }
+                });
+
+                // 3. Interversion des valeurs d'ID
+                await tx[table].update({
+                    where: { id: tempId },
+                    data: { id: previousId.id }
+                });
+                await tx[table].update({
+                    where: { id: tempId2 },
+                    data: { id: parseInt(id) }
+                });
+            });
+
+            console.log('Les IDs ont été intervertis avec succès !');
+        } catch (error) {
+            console.error('Une erreur est survenue :', error);
+        } finally {
+            await this.prismaService.$disconnect();
+        }
+    }
+
+    async swapLineDown(swapLineDto: SwapLine) {
+        const { table, id, buildId } = swapLineDto;
+
+        const nextId = await this.prismaService.buildStep.findFirst({
+            where: {
+                id: {
+                    gt: parseInt(id)
+                },
+                buildName_id: parseInt(buildId)
+            },
+            orderBy: {
+                id: 'asc'
+            }
+        });
+
+        try {
+            await this.prismaService.$transaction(async (tx) => {
+                const record1 = await tx[table].findUnique({
+                    where: { id: parseInt(id) }
+                });
+
+                const record2 = await tx[table].findUnique({
+                    where: { id: nextId.id }
+                });
+
+                if (!record1 || !record2) {
+                    throw new Error("L'un des IDs n'existe pas dans la table.");
+                }
+
+                const tempId = -1;
+                const tempId2 = -2;
+
+                await tx[table].update({
+                    where: { id: parseInt(id) },
+                    data: { id: tempId }
+                });
+
+                await tx[table].update({
+                    where: { id: nextId.id },
+                    data: { id: tempId2 }
+                });
+
+                // 3. Interversion des valeurs d'ID
+                await tx[table].update({
+                    where: { id: tempId },
+                    data: { id: nextId.id }
+                });
+                await tx[table].update({
+                    where: { id: tempId2 },
+                    data: { id: parseInt(id) }
+                });
+            });
+
+            console.log('Les IDs ont été intervertis avec succès !');
+        } catch (error) {
+            console.error('Une erreur est survenue :', error);
+        } finally {
+            await this.prismaService.$disconnect();
+        }
+    }
+
+    async deleteLine(deleteLineDto: DeleteLine) {
+        const { id } = deleteLineDto;
+
+        try {
+            const deletedLine = await this.prismaService.buildStep.delete({
+                where: {
+                    id: parseInt(id)
+                }
+            });
+            return deletedLine;
+        } catch (error) {
+            console.error('Error deleting BuildName:', error);
+            throw error;
+        } finally {
+            await this.prismaService.$disconnect();
+        }
     }
 }
