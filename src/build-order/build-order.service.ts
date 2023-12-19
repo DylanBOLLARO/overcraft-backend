@@ -14,13 +14,13 @@ export class BuildOrderService {
     async newBuild(buildNameDto: NewBuild) {
         const { title, desc, playrace, versusrace, User_id } = buildNameDto;
 
-        const user = await this.prismaService.buildName.findFirst({
+        const user = await this.prismaService.build.findFirst({
             where: { title }
         });
 
         if (user) throw new ConflictException('Build name already exists');
 
-        await this.prismaService.buildName.create({
+        await this.prismaService.build.create({
             data: {
                 title,
                 desc,
@@ -38,7 +38,7 @@ export class BuildOrderService {
     async getAllBuild(getAllBuildDto: GetAllBuild) {
         const { id } = getAllBuildDto;
 
-        const buildNames = await this.prismaService.buildName.findMany({
+        const buildNames = await this.prismaService.build.findMany({
             where: {
                 User_id: parseInt(id)
             }
@@ -53,7 +53,7 @@ export class BuildOrderService {
         const { id } = deleteBuildDto;
 
         try {
-            const deletedBuildName = await this.prismaService.buildName.delete({
+            const deletedBuildName = await this.prismaService.build.delete({
                 where: {
                     id: parseInt(id)
                 }
@@ -73,7 +73,7 @@ export class BuildOrderService {
         console.log(addLineDto);
         console.log("position: " + JSON.stringify(position));
 
-        await this.prismaService.buildStep.create({
+        await this.prismaService.build_step.create({
             data: {
                 desc,
                 population: parseInt(population),
@@ -89,7 +89,7 @@ export class BuildOrderService {
         const { id } = getAllLinesDto;
         console.log(getAllLinesDto);
 
-        const buildLines = await this.prismaService.buildStep.findMany({
+        const buildLines = await this.prismaService.build_step.findMany({
             where: {
                 buildName_id: parseInt(id)
             }
@@ -102,11 +102,11 @@ export class BuildOrderService {
 
     async exchange_position_by_id(index1: number, index2: number): Promise<void> {
         const transaction: any = await this.prismaService.$transaction([
-            this.prismaService.buildStep.findUnique({
+            this.prismaService.build_step.findUnique({
                 where: { id: index1 },
             }),
 
-            this.prismaService.buildStep.findUnique({
+            this.prismaService.build_step.findUnique({
                 where: { id: index2 },
             }),
 
@@ -121,14 +121,14 @@ export class BuildOrderService {
         transaction[0].position = transaction[1].position;
         transaction[1].position = temp;
 
-        await this.prismaService.buildStep.update({
+        await this.prismaService.build_step.update({
             where: { id: index1 },
             data: {
                 position: transaction[0].position,
             },
         });
 
-        await this.prismaService.buildStep.update({
+        await this.prismaService.build_step.update({
             where: { id: index2 },
             data: {
                 position: transaction[1].position,
@@ -141,13 +141,13 @@ export class BuildOrderService {
         const { id: init_id, buildId: build_id } = swapLineDto;
 
         try {
-            const { position: init_position }: any = await this.prismaService.buildStep.findUnique({
+            const { position: init_position }: any = await this.prismaService.build_step.findUnique({
                 where: {
                     id: +init_id,
                 },
             });
 
-            const array_all_steps: any = await this.prismaService.buildStep.findMany({
+            const array_all_steps: any = await this.prismaService.build_step.findMany({
                 where: {
                     buildName_id: +build_id,
                 },
@@ -166,13 +166,13 @@ export class BuildOrderService {
         const { id: init_id, buildId: build_id } = swapLineDto;
 
         try {
-            const { position: init_position }: any = await this.prismaService.buildStep.findUnique({
+            const { position: init_position }: any = await this.prismaService.build_step.findUnique({
                 where: {
                     id: +init_id,
                 },
             });
 
-            const array_all_steps: any = await this.prismaService.buildStep.findMany({
+            const array_all_steps: any = await this.prismaService.build_step.findMany({
                 where: {
                     buildName_id: +build_id,
                 },
@@ -190,7 +190,7 @@ export class BuildOrderService {
         const { id } = deleteLineDto;
 
         try {
-            const deletedLine = await this.prismaService.buildStep.delete({
+            const deletedLine = await this.prismaService.build_step.delete({
                 where: {
                     id: parseInt(id)
                 }
@@ -208,7 +208,7 @@ export class BuildOrderService {
         let build: any;
 
         try {
-            build = await this.prismaService.buildName.findUnique({
+            build = await this.prismaService.build.findUnique({
                 where: {
                     id: +body,
                 },
