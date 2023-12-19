@@ -7,41 +7,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model build {
-  id         Int          @id @default(autoincrement())
-  title      String       @db.VarChar(150)
-  desc       String?      @db.VarChar(150)
-  playrace   Int
-  versusrace Int
-  User_id    Int
-  user       user         @relation(fields: [User_id], references: [id], onDelete: Cascade)
-  build_step build_step[]
+model Build {
+  id          Int          @id @default(autoincrement())
+  title       String       @db.VarChar(150)
+  description String?      @db.VarChar(150)
+  race        Race
+  v_race      Race
+  user_id     Int
+  user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  build_step  Build_step[]
+
+  @@map("build")
 }
 
-model build_step {
-  id           Int    @id @default(autoincrement())
-  desc         String @db.VarChar(150)
-  population   Int
-  timer        Int
-  buildName_id Int
-  position     Int
-  build        build  @relation(fields: [buildName_id], references: [id])
+model Build_step {
+  id         Int    @id @default(autoincrement())
+  desc       String @db.VarChar(150)
+  population Int
+  timer      Int
+  build_id   Int
+  position   Int
+  build      Build  @relation(fields: [build_id], references: [id])
+
+  @@map("build_step")
 }
 
-model user {
+model User {
   id        Int       @id @default(autoincrement())
-  firstName String?  @db.VarChar(255)
-  lastName  String?  @db.VarChar(255)
+  firstName String?   @db.VarChar(255)
+  lastName  String?   @db.VarChar(255)
   username  String    @db.VarChar(55)
   email     String    @unique @db.VarChar(255)
   password  String    @db.VarChar(255)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @default(now())
-  role      Role      @default(USER)
-  build     build[]
+  role      Role      @default(GUEST)
+  build     Build[]
+
+  @@map("user")
 }
 
 enum Role {
+  GUEST
   USER
   ADMIN
 }
+
+enum Race {
+  ZERG
+  TERRAN
+  PROTOSS
+}
+

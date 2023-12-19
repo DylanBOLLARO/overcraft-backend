@@ -1,7 +1,6 @@
 import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { Prisma, Role } from '@prisma/client';
 
@@ -12,38 +11,34 @@ export class UserService {
 	) { }
 
 	async create(createUser: CreateUserDto) {
-		try {
-			const { email, password } = createUser;
+		const { email, password } = createUser;
 
-			const user = await this.prismaService.user.findFirst({
-				where: { email }
-			});
+		const user = await this.prismaService.user.findFirst({
+			where: { email }
+		});
 
-			if (user) throw new ConflictException({
-				"statusCode": HttpStatus.CONFLICT,
-				"message": "The provided email address is already in use. Please use a different email for registration."
-			});
+		if (user) throw new ConflictException({
+			"statusCode": HttpStatus.CONFLICT,
+			"message": "The provided email address is already in use. Please use a different email for registration."
+		});
 
-			const hashPassword = bcrypt.hashSync(password, 10);
+		const hashPassword = bcrypt.hashSync(password, 10);
 
-			const createdUser = await this.prismaService.user.create({
-				data: { ...createUser, password: hashPassword },
-				select: {
-					id: true,
-					firstName: true,
-					lastName: true,
-					username: true,
-					email: true,
-					createdAt: true,
-					updatedAt: true,
-					role: true,
-				},
-			});
+		const createdUser = await this.prismaService.user.create({
+			data: { ...createUser, password: hashPassword },
+			select: {
+				id: true,
+				firstName: true,
+				lastName: true,
+				username: true,
+				email: true,
+				createdAt: true,
+				updatedAt: true,
+				role: true,
+			},
+		});
 
-			return createdUser
-		} catch (error) {
-			console.log(error);
-		}
+		return createdUser
 	}
 
 	async findAll(role?: Role) {
@@ -62,7 +57,7 @@ export class UserService {
 		})
 	}
 
-	async update(id: number, updateEmployee: Prisma.userUpdateInput) {
+	async update(id: number, updateEmployee: Prisma.UserUpdateInput) {
 		return this.prismaService.user.update({
 			where: {
 				id,

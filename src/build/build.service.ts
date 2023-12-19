@@ -1,26 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBuildDto } from './dto/create-build.dto';
 import { UpdateBuildDto } from './dto/update-build.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma, Race } from '@prisma/client';
 
 @Injectable()
 export class BuildService {
-  create(createBuildDto: CreateBuildDto) {
-    return 'This action adds a new build';
+  constructor(
+    private readonly prismaService: PrismaService,
+  ) { }
+
+  async create(createBuild: CreateBuildDto) {
+    const { user_id } = createBuild
+    await this.prismaService.build.create({
+      data: { ...createBuild, user_id: +user_id },
+    });
   }
 
-  findAll() {
-    return `This action returns all build`;
+  async findAll(race?: Race) {
+    return this.prismaService.build.findMany(race && {
+      where: {
+        race,
+      }
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} build`;
+  async findOne(id: number) {
+    return this.prismaService.build.findUniqueOrThrow({
+      where: {
+        id,
+      }
+    })
   }
 
-  update(id: number, updateBuildDto: UpdateBuildDto) {
-    return `This action updates a #${id} build`;
+  async update(id: number, updateBuild: UpdateBuildDto) {
+    const { user_id } = updateBuild
+    return this.prismaService.build.update({
+      where: {
+        id,
+      },
+      data: { ...updateBuild, user_id: +user_id },
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} build`;
+  async delete(id: number) {
+    return this.prismaService.build.delete({
+      where: {
+        id,
+      }
+    })
   }
 }

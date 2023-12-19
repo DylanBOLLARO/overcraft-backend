@@ -1,3 +1,4 @@
+import { Race } from "@prisma/client";
 import { IsNotEmpty, IsNumberString } from "class-validator";
 
 export class CreateBuildDto {
@@ -5,18 +6,16 @@ export class CreateBuildDto {
     readonly title: string;
 
     @IsNotEmpty()
-    readonly desc: string;
+    readonly description: string;
+
+    @IsNotEmpty()
+    readonly race: Race;
+
+    @IsNotEmpty()
+    readonly v_race: Race;
 
     @IsNotEmpty()
     @IsNumberString()
-    readonly playrace: string;
-
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly versusrace: string;
-
-    @IsNotEmpty()
-    @IsNumberString()
-    readonly User_id: string;
+    readonly user_id: number;
 }
 

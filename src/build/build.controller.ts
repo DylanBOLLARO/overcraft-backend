@@ -1,20 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { BuildService } from './build.service';
 import { CreateBuildDto } from './dto/create-build.dto';
 import { UpdateBuildDto } from './dto/update-build.dto';
+import { Race } from '@prisma/client';
 
 @Controller('build')
 export class BuildController {
   constructor(private readonly buildService: BuildService) { }
 
   @Post()
-  create(@Body() createBuildDto: CreateBuildDto) {
-    return this.buildService.create(createBuildDto);
+  create(@Body() createBuild: CreateBuildDto) {
+    return this.buildService.create(createBuild);
   }
 
   @Get()
-  findAll() {
-    return this.buildService.findAll();
+  findAll(@Query('race') race?: Race) {
+    return this.buildService.findAll(race);
   }
 
   @Get(':id')
@@ -28,7 +29,7 @@ export class BuildController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.buildService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.buildService.delete(+id);
   }
 }
