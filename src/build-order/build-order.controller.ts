@@ -51,4 +51,9 @@ export class BuildOrderController {
     deleteLine(@Body() deleteLineDto: DeleteLine) {
         return this.buildOrderService.deleteLine(deleteLineDto);
     }
+
+    @Post('get-info-build')
+    getInfoBuild(@Body() body: any) {
+        return this.buildOrderService.getInfoBuild(body);
+    }
 }

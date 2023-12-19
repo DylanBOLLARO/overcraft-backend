@@ -58,7 +58,7 @@ export class BuildOrderService {
                     id: parseInt(id)
                 }
             });
-            return deletedBuildName;
+            console.log(deletedBuildName);
         } catch (error) {
             console.error('Error deleting BuildName:', error);
             throw error;
@@ -68,16 +68,18 @@ export class BuildOrderService {
     }
 
     async addLine(addLineDto: AddLine) {
-        const { desc, population, timer, buildName_id } = addLineDto;
+        const { desc, population, timer, buildName_id, position } = addLineDto;
 
         console.log(addLineDto);
+        console.log("position: " + JSON.stringify(position));
 
         await this.prismaService.buildStep.create({
             data: {
                 desc,
                 population: parseInt(population),
                 timer: parseInt(timer),
-                buildName_id: parseInt(buildName_id)
+                buildName_id: parseInt(buildName_id),
+                position: +position,
             }
         });
         await this.prismaService.$disconnect();
@@ -98,125 +100,89 @@ export class BuildOrderService {
         return buildLines;
     }
 
-    async swapLineUp(swapLineDto: SwapLine) {
-        const { table, id, buildId } = swapLineDto;
+    async exchange_position_by_id(index1: number, index2: number): Promise<void> {
+        const transaction: any = await this.prismaService.$transaction([
+            this.prismaService.buildStep.findUnique({
+                where: { id: index1 },
+            }),
 
-        const previousId = await this.prismaService.buildStep.findFirst({
-            where: {
-                id: {
-                    lt: parseInt(id)
-                },
-                buildName_id: parseInt(buildId)
+            this.prismaService.buildStep.findUnique({
+                where: { id: index2 },
+            }),
+
+        ]);
+
+        console.log(transaction);
+        if (!transaction[0] || !transaction[1]) {
+            throw new Error('L\'un des utilisateurs n\'existe pas.');
+        }
+
+        const temp = transaction[0].position;
+        transaction[0].position = transaction[1].position;
+        transaction[1].position = temp;
+
+        await this.prismaService.buildStep.update({
+            where: { id: index1 },
+            data: {
+                position: transaction[0].position,
             },
-            orderBy: {
-                id: 'desc'
-            }
         });
 
+        await this.prismaService.buildStep.update({
+            where: { id: index2 },
+            data: {
+                position: transaction[1].position,
+            },
+        });
+    }
+
+
+    async swapLineUp(swapLineDto: SwapLine) {
+        const { id: init_id, buildId: build_id } = swapLineDto;
+
         try {
-            await this.prismaService.$transaction(async (tx) => {
-                const record1: number = await tx[table].findUnique({
-                    where: { id: parseInt(id) }
-                });
-
-                const record2: number = await tx[table].findUnique({
-                    where: { id: previousId.id }
-                });
-
-                if (!record1 || !record2) {
-                    throw new Error("L'un des IDs n'existe pas dans la table.");
-                }
-
-                const tempId = -1;
-                const tempId2 = -2;
-
-                await tx[table].update({
-                    where: { id: parseInt(id) },
-                    data: { id: tempId }
-                });
-
-                await tx[table].update({
-                    where: { id: previousId.id },
-                    data: { id: tempId2 }
-                });
-
-                // 3. Interversion des valeurs d'ID
-                await tx[table].update({
-                    where: { id: tempId },
-                    data: { id: previousId.id }
-                });
-                await tx[table].update({
-                    where: { id: tempId2 },
-                    data: { id: parseInt(id) }
-                });
+            const { position: init_position }: any = await this.prismaService.buildStep.findUnique({
+                where: {
+                    id: +init_id,
+                },
             });
 
-            console.log('Les IDs ont été intervertis avec succès !');
+            const array_all_steps: any = await this.prismaService.buildStep.findMany({
+                where: {
+                    buildName_id: +build_id,
+                },
+            });
+
+            const { id: prev_position_id } = array_all_steps.find((x: any) => x.position === (init_position - 1));
+            this.exchange_position_by_id(prev_position_id, +init_id)
+
         } catch (error) {
-            console.error('Une erreur est survenue :', error);
-        } finally {
-            await this.prismaService.$disconnect();
+            console.log("there is no prev_position");
         }
     }
 
-    async swapLineDown(swapLineDto: SwapLine) {
-        const { table, id, buildId } = swapLineDto;
 
-        const nextId = await this.prismaService.buildStep.findFirst({
-            where: {
-                id: {
-                    gt: parseInt(id)
-                },
-                buildName_id: parseInt(buildId)
-            },
-            orderBy: {
-                id: 'asc'
-            }
-        });
+    async swapLineDown(swapLineDto: SwapLine) {
+        const { id: init_id, buildId: build_id } = swapLineDto;
 
         try {
-            await this.prismaService.$transaction(async (tx) => {
-                const record1 = await tx[table].findUnique({
-                    where: { id: parseInt(id) }
-                });
-
-                const record2 = await tx[table].findUnique({
-                    where: { id: nextId.id }
-                });
-
-                if (!record1 || !record2) {
-                    throw new Error("L'un des IDs n'existe pas dans la table.");
-                }
-
-                const tempId = -1;
-                const tempId2 = -2;
-
-                await tx[table].update({
-                    where: { id: parseInt(id) },
-                    data: { id: tempId }
-                });
-
-                await tx[table].update({
-                    where: { id: nextId.id },
-                    data: { id: tempId2 }
-                });
-
-                // 3. Interversion des valeurs d'ID
-                await tx[table].update({
-                    where: { id: tempId },
-                    data: { id: nextId.id }
-                });
-                await tx[table].update({
-                    where: { id: tempId2 },
-                    data: { id: parseInt(id) }
-                });
+            const { position: init_position }: any = await this.prismaService.buildStep.findUnique({
+                where: {
+                    id: +init_id,
+                },
             });
 
-            console.log('Les IDs ont été intervertis avec succès !');
+            const array_all_steps: any = await this.prismaService.buildStep.findMany({
+                where: {
+                    buildName_id: +build_id,
+                },
+            });
+
+            const { id: next_position_id } = array_all_steps.find((x: any) => x.position === (init_position + 1));
+            this.exchange_position_by_id(next_position_id, +init_id)
+
         } catch (error) {
-            console.error('Une erreur est survenue :', error);
-        } finally {
-            await this.prismaService.$disconnect();
+            console.log("there is no prev_position");
         }
     }
 
@@ -236,5 +202,32 @@ export class BuildOrderService {
         } finally {
             await this.prismaService.$disconnect();
         }
+    }
+
+    async getInfoOfOneBuild(body: any) {
+        let build: any;
+
+        try {
+            build = await this.prismaService.buildName.findUnique({
+                where: {
+                    id: +body,
+                },
+            });
+        } catch (error) {
+            console.error(error);
+            throw error;
+        } finally {
+            await this.prismaService.$disconnect();
+        }
+
+        return await build;
+    }
+
+    async getInfoBuild(body: any) {
+        const { id } = body;
+
+        let infoBuildOrder = await this.getInfoOfOneBuild(id);
+        let listStep = await this.getAllLines({ id });
+        return { ...infoBuildOrder, listStep }
     }
 }

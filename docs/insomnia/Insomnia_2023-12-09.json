@@ -1,0 +1,136 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2023-12-09T22:51:40.273Z",
+    "__export_source": "insomnia.desktop.app:v8.4.5",
+    "resources": [
+        {
+            "_id": "req_c98a4f1c5fd248e9af34a0736b7d982b",
+            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
+            "modified": 1702161676503,
+            "created": 1702161369435,
+            "url": "http://localhost:3001/auth/signup",
+            "name": "signup user",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": [
+                    {
+                        "id": "pair_974bb23d09f44e718b397b9e8bbbb8c6",
+                        "name": "username",
+                        "value": "Skywalker",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_6af0a4197c4d4176a2253c7e9ea9a4c6",
+                        "name": "email",
+                        "value": "skywalker@gmail.com",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_8d435cafec7641d7826efed32022a43d",
+                        "name": "password",
+                        "value": "RvqFxB5hXc7955",
+                        "description": ""
+                    }
+                ]
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1702161369435,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "wrk_61131a2d40904e6b906e7203c9d314f2",
+            "parentId": null,
+            "modified": 1702161366094,
+            "created": 1702161360563,
+            "name": "overcraft-api",
+            "description": "",
+            "scope": "collection",
+            "_type": "workspace"
+        },
+        {
+            "_id": "req_c80156a823f1425199193563475a656d",
+            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
+            "modified": 1702161719461,
+            "created": 1702161685512,
+            "url": "http://localhost:3001/auth/signin",
+            "name": "signin user",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": [
+                    {
+                        "id": "pair_6af0a4197c4d4176a2253c7e9ea9a4c6",
+                        "name": "email",
+                        "value": "skywalker@gmail.com",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_8d435cafec7641d7826efed32022a43d",
+                        "name": "password",
+                        "value": "RvqFxB5hXc7955",
+                        "description": ""
+                    }
+                ]
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1701766618105.5,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "env_fbba1196ea877ffb6fee6bff8c12e6cf0cb2d8f0",
+            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
+            "modified": 1702161360564,
+            "created": 1702161360564,
+            "name": "Base Environment",
+            "data": {},
+            "dataPropertyOrder": null,
+            "color": null,
+            "isPrivate": false,
+            "metaSortKey": 1702161360565,
+            "_type": "environment"
+        },
+        {
+            "_id": "jar_fbba1196ea877ffb6fee6bff8c12e6cf0cb2d8f0",
+            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
+            "modified": 1702161360565,
+            "created": 1702161360565,
+            "name": "Default Jar",
+            "cookies": [],
+            "_type": "cookie_jar"
+        }
+    ]
+}

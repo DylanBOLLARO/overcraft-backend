@@ -15,4 +15,7 @@ export class AddLine {
     @IsNotEmpty()
     @IsNumberString()
     readonly buildName_id: string;
+
+    @IsNotEmpty()
+    readonly position: string;
 }

@@ -26,7 +26,7 @@ model BuildName {
     versusrace Int
     User_id    Int
 
-    user       User        @relation(fields: [User_id], references: [id])
+    user       User        @relation(fields: [User_id], references: [id], onDelete: Cascade)
     buildSteps BuildStep[]
 }
 
@@ -36,6 +36,7 @@ model BuildStep {
     population   Int
     timer        Int
     buildName_id Int
+    position Int
 
-    buildName BuildName? @relation(fields: [buildName_id], references: [id], onDelete: Cascade)
+    buildName BuildName? @relation(fields: [buildName_id], references: [id])
 }

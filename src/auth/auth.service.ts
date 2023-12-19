@@ -19,21 +19,22 @@ export class AuthService {
         private readonly jwtService: JwtService
     ) {}
 
-    async signup(signupDto: SignupDto) {
-        const { email, username, password } = signupDto;
 
-        const user = await this.prismaService.user.findUnique({
+    async signup(dataForCreateAccount: SignupDto) {
+        const { username, email, password } = dataForCreateAccount;
+
+        const user = await this.prismaService.user.findFirst({
             where: { email }
         });
 
-        if (user) throw new ConflictException('Email already exists');
+        if (user) throw new ConflictException('Email already exists.');
 
         const hashedPassword = await bcrypt.hash(
             password + this.configService.get<string>('HASH_PASSWORD_SECRET'),
             5
         );
 
-        await this.prismaService.user.create({
+        let createdUser = await this.prismaService.user.create({
             data: {
                 email,
                 username,
@@ -41,14 +42,15 @@ export class AuthService {
             }
         });
 
-        return {
-            data: 'User created successfully'
-        };
+        delete createdUser.password
+
+        return createdUser
     }
 
     async signin(signinDto: SigninDto) {
         const { email, password } = signinDto;
 
+        console.log({ email, password });
         const user = await this.prismaService.user.findUnique({
             where: { email }
         });
@@ -73,7 +75,7 @@ export class AuthService {
             secret: this.configService.get<string>('JWT_SECRET')
         });
         return {
-            token,
+            accessToken: token,
             user: {
                 username: user.username,
                 email: user.email,
