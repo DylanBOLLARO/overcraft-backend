@@ -13,7 +13,7 @@ model Build {
   description String?      @db.VarChar(150)
   race        Race
   v_race      Race
-  user_id     Int
+  user_id     Int          
   user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
   build_step  Build_step[]
 
@@ -21,13 +21,13 @@ model Build {
 }
 
 model Build_step {
-  id         Int    @id @default(autoincrement())
-  desc       String @db.VarChar(150)
-  population Int
-  timer      Int
-  build_id   Int
-  position   Int
-  build      Build  @relation(fields: [build_id], references: [id])
+  id          Int    @id @default(autoincrement())
+  description String @db.VarChar(150)
+  population  Int
+  timer       Int
+  position    Int    @unique
+  build_id    Int    
+  build       Build  @relation(fields: [build_id], references: [id])
 
   @@map("build_step")
 }
@@ -58,4 +58,3 @@ enum Race {
   TERRAN
   PROTOSS
 }
-

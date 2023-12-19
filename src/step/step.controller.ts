@@ -22,13 +22,23 @@ export class StepController {
     return this.stepService.findOne(+id);
   }
 
+  @Patch('up/:id')
+  swapLineUp(@Param('id') id: string) {
+    return this.stepService.up(+id);
+  }
+
+  @Patch('down/:id')
+  swapLineDown(@Param('id') id: string) {
+    return this.stepService.down(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStepDto: UpdateStepDto) {
     return this.stepService.update(+id, updateStepDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.stepService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.stepService.delete(+id);
   }
 }
