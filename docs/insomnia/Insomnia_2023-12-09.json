@@ -1,37 +1,49 @@
 {
     "_type": "export",
     "__export_format": 4,
-    "__export_date": "2023-12-09T22:51:40.273Z",
-    "__export_source": "insomnia.desktop.app:v8.4.5",
+    "__export_date": "2023-12-20T17:40:39.837Z",
+    "__export_source": "insomnia.desktop.app:v8.5.0",
     "resources": [
         {
-            "_id": "req_c98a4f1c5fd248e9af34a0736b7d982b",
-            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
-            "modified": 1702161676503,
-            "created": 1702161369435,
-            "url": "http://localhost:3001/auth/signup",
-            "name": "signup user",
+            "_id": "req_6712466e40a0487b81be021f1ce5f448",
+            "parentId": "fld_ea54ce1bdd9a400ea2c65632001b63c9",
+            "modified": 1703022013185,
+            "created": 1703006273034,
+            "url": "http://localhost:3001/user",
+            "name": "create user",
             "description": "",
             "method": "POST",
             "body": {
                 "mimeType": "application/x-www-form-urlencoded",
                 "params": [
                     {
-                        "id": "pair_974bb23d09f44e718b397b9e8bbbb8c6",
+                        "id": "pair_a32b6fed50164972b5b470ab42085b19",
                         "name": "username",
                         "value": "Skywalker",
                         "description": ""
                     },
                     {
-                        "id": "pair_6af0a4197c4d4176a2253c7e9ea9a4c6",
+                        "id": "pair_c5bd8fe8a1c94f09aac375285a91a08f",
                         "name": "email",
-                        "value": "skywalker@gmail.com",
+                        "value": "skywalker@gmail.aaaa",
                         "description": ""
                     },
                     {
-                        "id": "pair_8d435cafec7641d7826efed32022a43d",
+                        "id": "pair_d46bfa001d5d4d7184b9226601f7b6cd",
                         "name": "password",
-                        "value": "RvqFxB5hXc7955",
+                        "value": "skywalker",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_0749efc0c9dd454a9d36113fec6df554",
+                        "name": "firstName",
+                        "value": "Sky",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_d4411d57d8da4f8c82911cb2947f28df",
+                        "name": "lastName",
+                        "value": "Walker",
                         "description": ""
                     }
                 ]
@@ -45,7 +57,7 @@
                 { "name": "User-Agent", "value": "insomnia/8.4.5" }
             ],
             "authentication": {},
-            "metaSortKey": -1702161369435,
+            "metaSortKey": -1703022013150,
             "isPrivate": false,
             "settingStoreCookies": true,
             "settingSendCookies": true,
@@ -54,6 +66,18 @@
             "settingRebuildPath": true,
             "settingFollowRedirects": "global",
             "_type": "request"
+        },
+        {
+            "_id": "fld_ea54ce1bdd9a400ea2c65632001b63c9",
+            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
+            "modified": 1703022098382,
+            "created": 1703022005112,
+            "name": "user",
+            "description": "",
+            "environment": {},
+            "environmentPropertyOrder": null,
+            "metaSortKey": -1703022050071,
+            "_type": "request_group"
         },
         {
             "_id": "wrk_61131a2d40904e6b906e7203c9d314f2",
@@ -66,27 +90,60 @@
             "_type": "workspace"
         },
         {
-            "_id": "req_c80156a823f1425199193563475a656d",
-            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
-            "modified": 1702161719461,
-            "created": 1702161685512,
-            "url": "http://localhost:3001/auth/signin",
-            "name": "signin user",
+            "_id": "req_b8d63bae39994c1b830c248bb560e7ce",
+            "parentId": "fld_ea54ce1bdd9a400ea2c65632001b63c9",
+            "modified": 1703022021782,
+            "created": 1703012778399,
+            "url": "http://localhost:3001/user",
+            "name": "find all user",
             "description": "",
-            "method": "POST",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [
+                {
+                    "id": "pair_72d8df7762fb40fe906a5abc14e38a82",
+                    "name": "role",
+                    "value": "USER",
+                    "description": ""
+                }
+            ],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022013050,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_f6ddd4b5fe1946d2a99b35fc467d3f6c",
+            "parentId": "fld_ea54ce1bdd9a400ea2c65632001b63c9",
+            "modified": 1703022025976,
+            "created": 1703012961679,
+            "url": "http://localhost:3001/user/6",
+            "name": "find one user",
+            "description": "",
+            "method": "GET",
             "body": {
                 "mimeType": "application/x-www-form-urlencoded",
                 "params": [
                     {
-                        "id": "pair_6af0a4197c4d4176a2253c7e9ea9a4c6",
-                        "name": "email",
-                        "value": "skywalker@gmail.com",
-                        "description": ""
-                    },
-                    {
-                        "id": "pair_8d435cafec7641d7826efed32022a43d",
-                        "name": "password",
-                        "value": "RvqFxB5hXc7955",
+                        "id": "pair_9e906668aa3348e494e52425196c5071",
+                        "name": "",
+                        "value": "",
                         "description": ""
                     }
                 ]
@@ -100,7 +157,656 @@
                 { "name": "User-Agent", "value": "insomnia/8.4.5" }
             ],
             "authentication": {},
-            "metaSortKey": -1701766618105.5,
+            "metaSortKey": -1703022012950,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_b33d7f8d84274682a17b06f892f5e832",
+            "parentId": "fld_ea54ce1bdd9a400ea2c65632001b63c9",
+            "modified": 1703022029455,
+            "created": 1703013081516,
+            "url": "{{ _.protocol }}{{ _.domaine }}/user/6",
+            "name": "update user",
+            "description": "",
+            "method": "PATCH",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": [
+                    {
+                        "id": "pair_a32b6fed50164972b5b470ab42085b19",
+                        "name": "username",
+                        "value": "Skywalker",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_c5bd8fe8a1c94f09aac375285a91a08f",
+                        "name": "email",
+                        "value": "skywalker@gmail.com",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_d46bfa001d5d4d7184b9226601f7b6cd",
+                        "name": "role",
+                        "value": "ADMIN",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_a2f607b1748a43d0aad988fd66d81ac4",
+                        "name": "firstName",
+                        "value": "Skywalker",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_52d0787dacbe4102a0b53715992daae5",
+                        "name": "lastName",
+                        "value": "Skywalker",
+                        "description": ""
+                    }
+                ]
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022012850,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_19abf991085247cf9d4a8b221ed3d616",
+            "parentId": "fld_ea54ce1bdd9a400ea2c65632001b63c9",
+            "modified": 1703022033999,
+            "created": 1703013468417,
+            "url": "http://localhost:3001/user/6",
+            "name": "delete user",
+            "description": "",
+            "method": "DELETE",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022012750,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_ba71f8ae992543e3abacad5f07bdfed9",
+            "parentId": "fld_f1e0e9b100554488bad7682b5b3f6191",
+            "modified": 1703022058348,
+            "created": 1703005392159,
+            "url": "http://localhost:3001/build",
+            "name": "create build",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": [
+                    {
+                        "id": "pair_a32b6fed50164972b5b470ab42085b19",
+                        "name": "title",
+                        "value": "Proxy starport",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_c5bd8fe8a1c94f09aac375285a91a08f",
+                        "name": "description",
+                        "value": "Mass marines",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_d46bfa001d5d4d7184b9226601f7b6cd",
+                        "name": "race",
+                        "value": "ZERG",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_74ac0d68f619475eb959e1ad3a00faf8",
+                        "name": "v_race",
+                        "value": "ZERG",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_6490b35d008a4d319cffd5089c4d07d7",
+                        "name": "user_id",
+                        "value": "1",
+                        "description": ""
+                    }
+                ]
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022053898,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "fld_f1e0e9b100554488bad7682b5b3f6191",
+            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
+            "modified": 1703022049971,
+            "created": 1703022049971,
+            "name": "build",
+            "description": "",
+            "environment": {},
+            "environmentPropertyOrder": null,
+            "metaSortKey": -1703022049971,
+            "_type": "request_group"
+        },
+        {
+            "_id": "req_55f4b079fcf24d3399134faceea4df0e",
+            "parentId": "fld_f1e0e9b100554488bad7682b5b3f6191",
+            "modified": 1703022057303,
+            "created": 1703005571794,
+            "url": "http://localhost:3001/build",
+            "name": "find all build",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [
+                {
+                    "id": "pair_77eb1a92f82e4d8b9c17950dd78c4878",
+                    "name": "race",
+                    "value": "ZERG",
+                    "description": "",
+                    "disabled": false
+                }
+            ],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022053798,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_ca9961faa4f74ed79f205f63e45a32bf",
+            "parentId": "fld_f1e0e9b100554488bad7682b5b3f6191",
+            "modified": 1703022062774,
+            "created": 1703005643720,
+            "url": "http://localhost:3001/build/9",
+            "name": "find one build",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022053698,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_80a4be170ddf41afb33eb596a2d76e20",
+            "parentId": "fld_f1e0e9b100554488bad7682b5b3f6191",
+            "modified": 1703022070980,
+            "created": 1703020938910,
+            "url": "http://localhost:3001/build/9",
+            "name": "update build",
+            "description": "",
+            "method": "PATCH",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": [
+                    {
+                        "id": "pair_a32b6fed50164972b5b470ab42085b19",
+                        "name": "title",
+                        "value": "4 rax massif",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_c5bd8fe8a1c94f09aac375285a91a08f",
+                        "name": "description",
+                        "value": "Mass marines sur 4 rax",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_d46bfa001d5d4d7184b9226601f7b6cd",
+                        "name": "race",
+                        "value": "ZERG",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_74ac0d68f619475eb959e1ad3a00faf8",
+                        "name": "v_race",
+                        "value": "ZERG",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_6490b35d008a4d319cffd5089c4d07d7",
+                        "name": "user_id",
+                        "value": "1",
+                        "description": ""
+                    }
+                ]
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022053673,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_7d76533493bb4404b99e292d80eab90f",
+            "parentId": "fld_f1e0e9b100554488bad7682b5b3f6191",
+            "modified": 1703022069850,
+            "created": 1703005934741,
+            "url": "http://localhost:3001/build/12",
+            "name": "delete build",
+            "description": "",
+            "method": "DELETE",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022053648,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_2ce5ef091b1249d988df041da8dd53b7",
+            "parentId": "fld_bd2e8e3cae0f446aa00d4dc1ace945aa",
+            "modified": 1703026061074,
+            "created": 1703021917506,
+            "url": "http://localhost:3001/step",
+            "name": "create step",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": [
+                    {
+                        "id": "pair_c5bd8fe8a1c94f09aac375285a91a08f",
+                        "name": "description",
+                        "value": "Mass marines",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_6490b35d008a4d319cffd5089c4d07d7",
+                        "name": "build_id",
+                        "value": "1",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_afd0d14081904099abe261eb26401188",
+                        "name": "position",
+                        "value": "20",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_489a11deb69246b7b1e712185ceaacae",
+                        "name": "timer",
+                        "value": "20",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_3c6c1e7781984e5b8a9728e226ff125d",
+                        "name": "population",
+                        "value": "20",
+                        "description": ""
+                    }
+                ]
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022110958,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "fld_bd2e8e3cae0f446aa00d4dc1ace945aa",
+            "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
+            "modified": 1703022107270,
+            "created": 1703022084836,
+            "name": "step",
+            "description": "",
+            "environment": {},
+            "environmentPropertyOrder": null,
+            "metaSortKey": -1702968162189.271,
+            "_type": "request_group"
+        },
+        {
+            "_id": "req_58bc6ea3e9c64ddea72523ed6e80388a",
+            "parentId": "fld_bd2e8e3cae0f446aa00d4dc1ace945aa",
+            "modified": 1703023771592,
+            "created": 1703023460040,
+            "url": "http://localhost:3001/step",
+            "name": "find all step",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022110858,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_7da6f03d640e4c778d304cc1f831eac6",
+            "parentId": "fld_bd2e8e3cae0f446aa00d4dc1ace945aa",
+            "modified": 1703023768166,
+            "created": 1703023768166,
+            "url": "http://localhost:3001/step/1",
+            "name": "find one step",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022082378,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_02f6f741e9a64b4497aae5a3ea099ef4",
+            "parentId": "fld_bd2e8e3cae0f446aa00d4dc1ace945aa",
+            "modified": 1703024064963,
+            "created": 1703023782034,
+            "url": "http://localhost:3001/step/5",
+            "name": "update step",
+            "description": "",
+            "method": "PATCH",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": [
+                    {
+                        "id": "pair_a32b6fed50164972b5b470ab42085b19",
+                        "name": "description",
+                        "value": "4 rax massif",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_d46bfa001d5d4d7184b9226601f7b6cd",
+                        "name": "build_id",
+                        "value": "1",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_74ac0d68f619475eb959e1ad3a00faf8",
+                        "name": "position",
+                        "value": "0",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_6490b35d008a4d319cffd5089c4d07d7",
+                        "name": "timer",
+                        "value": "56",
+                        "description": ""
+                    },
+                    {
+                        "id": "pair_23e8460a9ebf41c58e0ada6a8dd43530",
+                        "name": "population",
+                        "value": "20",
+                        "description": ""
+                    }
+                ]
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022082278,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_9028c3054ff44213af555065c3b6155d",
+            "parentId": "fld_bd2e8e3cae0f446aa00d4dc1ace945aa",
+            "modified": 1703024214022,
+            "created": 1703024113565,
+            "url": "http://localhost:3001/step/6",
+            "name": "delete step",
+            "description": "",
+            "method": "DELETE",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022082178,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_bd9d385c33a64deca3905197a052cd46",
+            "parentId": "fld_bd2e8e3cae0f446aa00d4dc1ace945aa",
+            "modified": 1703026079164,
+            "created": 1703024644818,
+            "url": "http://localhost:3001/step/up/7",
+            "name": "up step",
+            "description": "",
+            "method": "PATCH",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [
+                {
+                    "id": "pair_36cb85f1332641c9a2527b278bef69c4",
+                    "name": "",
+                    "value": "",
+                    "description": ""
+                }
+            ],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022082078,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_2023f410856b483495b8cd29db6d3ab4",
+            "parentId": "fld_bd2e8e3cae0f446aa00d4dc1ace945aa",
+            "modified": 1703025936075,
+            "created": 1703025880649,
+            "url": "http://localhost:3001/step/down/1",
+            "name": "down step",
+            "description": "",
+            "method": "PATCH",
+            "body": {
+                "mimeType": "application/x-www-form-urlencoded",
+                "params": []
+            },
+            "parameters": [
+                {
+                    "id": "pair_36cb85f1332641c9a2527b278bef69c4",
+                    "name": "",
+                    "value": "",
+                    "description": ""
+                }
+            ],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                { "name": "User-Agent", "value": "insomnia/8.4.5" }
+            ],
+            "authentication": {},
+            "metaSortKey": -1703022067988,
             "isPrivate": false,
             "settingStoreCookies": true,
             "settingSendCookies": true,
@@ -113,11 +819,11 @@
         {
             "_id": "env_fbba1196ea877ffb6fee6bff8c12e6cf0cb2d8f0",
             "parentId": "wrk_61131a2d40904e6b906e7203c9d314f2",
-            "modified": 1702161360564,
+            "modified": 1703013317868,
             "created": 1702161360564,
             "name": "Base Environment",
-            "data": {},
-            "dataPropertyOrder": null,
+            "data": { "protocol": "http://", "domaine": "localhost:3001" },
+            "dataPropertyOrder": { "&": ["protocol", "domaine"] },
             "color": null,
             "isPrivate": false,
             "metaSortKey": 1702161360565,

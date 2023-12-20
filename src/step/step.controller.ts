@@ -1,44 +1,48 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { StepService } from './step.service';
-import { CreateStepDto } from './dto/create-step.dto';
-import { UpdateStepDto } from './dto/update-step.dto';
+import {
+	Controller,
+	Get,
+	Post,
+	Body,
+	Patch,
+	Param,
+	Delete
+} from "@nestjs/common";
+import { StepService } from "./step.service";
+import { CreateStepDto } from "./dto/create-step.dto";
+import { UpdateStepDto } from "./dto/update-step.dto";
+import { MovePositionStepDto } from "./dto/move-position-step.dto";
 
-@Controller('step')
+@Controller("step")
 export class StepController {
-  constructor(private readonly stepService: StepService) {}
+	constructor(private readonly stepService: StepService) {}
 
-  @Post()
-  create(@Body() createStepDto: CreateStepDto) {
-    return this.stepService.create(createStepDto);
-  }
+	@Post()
+	create(@Body() createStep: CreateStepDto) {
+		return this.stepService.create(createStep);
+	}
 
-  @Get()
-  findAll() {
-    return this.stepService.findAll();
-  }
+	@Get()
+	findAll() {
+		return this.stepService.findAll();
+	}
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.stepService.findOne(+id);
-  }
+	@Get(":id")
+	findOne(@Param("id") id: string) {
+		return this.stepService.findOne(+id);
+	}
 
-  @Patch('up/:id')
-  swapLineUp(@Param('id') id: string) {
-    return this.stepService.up(+id);
-  }
+	@Patch("move-position")
+	movePosition(@Body() movePositionStep: MovePositionStepDto) {
+		return this.stepService.movePosition(movePositionStep);
+	}
 
-  @Patch('down/:id')
-  swapLineDown(@Param('id') id: string) {
-    return this.stepService.down(+id);
-  }
+	@Patch(":id")
+	update(@Param("id") id: string, @Body() updateStepDto: UpdateStepDto) {
+		return this.stepService.update(+id, updateStepDto);
+	}
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStepDto: UpdateStepDto) {
-    return this.stepService.update(+id, updateStepDto);
-  }
-
-  @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.stepService.delete(+id);
-  }
+	@Delete(":id")
+	delete(@Param("id") id: string) {
+		return this.stepService.delete(+id);
+	}
 }
