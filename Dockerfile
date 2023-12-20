@@ -31,8 +31,6 @@ RUN npm install --only=production
 
 RUN npx prisma generate
 
-RUN rm package*.json
-
 EXPOSE 3001
 
-CMD ["node","dist/main.js"]
+CMD [ "npm", "run", "start:prod" ]
