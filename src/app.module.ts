@@ -5,6 +5,7 @@ import { BuildModule } from "./build/build.module";
 import { StepModule } from "./step/step.module";
 import { UserModule } from "./user/user.module";
 import { RequestLoggerMiddleware } from "middleware/logger";
+import { AuthModule } from './auth/auth.module';
 
 @Module({
 	imports: [
@@ -12,7 +13,8 @@ import { RequestLoggerMiddleware } from "middleware/logger";
 		PrismaModule,
 		BuildModule,
 		StepModule,
-		UserModule
+		UserModule,
+		AuthModule
 	],
 	controllers: [],
 	providers: []
