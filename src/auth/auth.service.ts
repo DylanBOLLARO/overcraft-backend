@@ -187,8 +187,6 @@ export class AuthService {
         delete user.password
         delete user.hashedRt
 
-        console.log(JSON.stringify({ tokens, user }));
-
         return { tokens, user };
     }
 

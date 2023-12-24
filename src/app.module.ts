@@ -6,6 +6,8 @@ import { StepModule } from "./step/step.module";
 import { UserModule } from "./user/user.module";
 import { RequestLoggerMiddleware } from "middleware/logger";
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from "@nestjs/core";
+import { AtGuard } from "./common/guards";
 
 @Module({
 	imports: [
@@ -17,7 +19,13 @@ import { AuthModule } from './auth/auth.module';
 		AuthModule
 	],
 	controllers: [],
-	providers: []
+	providers: [
+		{
+			provide: APP_GUARD,
+			useClass: AtGuard,
+		},
+	],
+
 })
 export class AppModule {
 	configure(consumer: MiddlewareConsumer) {
