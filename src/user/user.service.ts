@@ -9,23 +9,19 @@ export class UserService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	async findAll(role?: Role) {
-		return this.prismaService.user.findMany(
-			role && {
-				where: {
-					role
-				},
-				select: {
-					id: true,
-					firstName: true,
-					lastName: true,
-					username: true,
-					email: true,
-					createdAt: true,
-					updatedAt: true,
-					role: true
-				}
-			},
-		);
+		return this.prismaService.user.findMany({
+			where: role ? { role } : undefined,
+			select: {
+				id: true,
+				firstName: true,
+				lastName: true,
+				username: true,
+				email: true,
+				createdAt: true,
+				updatedAt: true,
+				role: true
+			}
+		});
 	}
 
 	async findOne(id: number) {

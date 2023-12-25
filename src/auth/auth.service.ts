@@ -83,23 +83,13 @@ export class AuthService {
         };
     }
 
-    async signup(signupAuth: SignupAuthDto) {
-        const { email, password } = signupAuth;
+    async signup(signup: SignupAuthDto) {
+        const { email, password } = signup;
         const hashPassword = bcrypt.hashSync(password, 10);
 
         const user = await this.prismaService.user.findUnique({
             where: {
                 email
-            },
-            select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                username: true,
-                email: true,
-                createdAt: true,
-                updatedAt: true,
-                role: true
             }
         });
 
@@ -112,33 +102,27 @@ export class AuthService {
 
         const userCreated = await this.prismaService.user.create({
             data: {
-                ...signupAuth,
+                ...signup,
                 password: hashPassword,
-            },
-            select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                username: true,
-                email: true,
-                createdAt: true,
-                updatedAt: true,
-                role: true
             }
         })
 
-        return userCreated;
+        const tokens = await this.getTokens(userCreated.id, userCreated.email);
+        await this.updateRtHash(userCreated.id, tokens.refresh_token);
+
+        return tokens;
     }
 
     async signToken(
         userId: number,
         email: string,
     ): Promise<{ access_token: string }> {
+
         const payload = {
             sub: userId,
             email,
         };
-        const secret = this.configService.get('JWT_SECRET');
+        const secret = this.configService.get('AT_SECRET');
 
         const token = await this.jwtService.signAsync(
             payload,
@@ -166,7 +150,7 @@ export class AuthService {
             throw new ConflictException({
                 statusCode: HttpStatus.FORBIDDEN,
                 message:
-                    "Credentials incorrect"
+                    "Access Denied"
             });
 
         const passwordMatches = await bcrypt.compare(
@@ -183,11 +167,21 @@ export class AuthService {
         const tokens = await this.getTokens(user.id, user.email);
         await this.updateRtHash(user.id, tokens.refresh_token);
 
-
-        delete user.password
-        delete user.hashedRt
-
-        return { tokens, user };
+        return tokens;
     }
 
+    async logout(userId: number): Promise<boolean> {
+        await this.prismaService.user.updateMany({
+            where: {
+                id: userId,
+                hashedRt: {
+                    not: null,
+                },
+            },
+            data: {
+                hashedRt: null,
+            },
+        });
+        return true;
+    }
 }

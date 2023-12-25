@@ -1,30 +1,50 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Public } from '../common/decorators';
+import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators';
 import { SignupAuthDto } from './dto';
 import { SigninAuthDto } from './dto/signin-auth.dto';
-import { JwtService } from '@nestjs/jwt';
+import { AtGuard, RtGuard } from 'src/common/guards';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService,
-    private readonly jwtService: JwtService) { }
+  constructor(private authService: AuthService) { }
 
   @Public()
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
-  signup(@Body() signupAuth: SignupAuthDto) {
-    return this.authService.signup(signupAuth);
+  signup(@Body() signup: SignupAuthDto) {
+    return this.authService.signup(signup);
   }
 
   @Public()
   @Post('signin')
   @HttpCode(HttpStatus.OK)
-  signin(@Body() dto: SigninAuthDto, @Res({ passthrough: true }) res) {
-    const payload = { username: 'john', id: 1 };
-    res.cookie('user_token', this.jwtService.sign(payload), {
-      expires: new Date(Date.now() + 3600000),
-    });
-    return this.authService.signin(dto);
+  signin(@Body() signin: SigninAuthDto) {
+    return this.authService.signin(signin);
   }
+
+  @UseGuards(AtGuard)
+  @Post('get-connected-user-id')
+  @HttpCode(HttpStatus.OK)
+  verifyToken(@GetCurrentUser() user: any) {
+    return user
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  logout(@GetCurrentUserId() userId: number): Promise<boolean> {
+    return this.authService.logout(userId);
+  }
+
+  @Public()
+  @UseGuards(RtGuard)
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  refreshTokens(
+    @GetCurrentUserId() userId: number,
+    @GetCurrentUser('refreshToken') refreshToken: string,
+  ) {
+    return this.authService.refreshTokens(userId, refreshToken);
+  }
+
 }

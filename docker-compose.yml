@@ -19,13 +19,14 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: nestjs
+    restart: always
     ports:
       - '3001:3001'
     depends_on:
       - postgres
     environment:
       - DATABASE_URL=${DATABASE_URL}
-      - JWT_SECRET=${JWT_SECRET}
+      - AT_SECRET=${AT_SECRET}
     volumes:
       - ./src:/app/src
 

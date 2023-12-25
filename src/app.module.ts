@@ -1,13 +1,13 @@
-import { MiddlewareConsumer, Module } from "@nestjs/common";
-import { PrismaModule } from "./prisma/prisma.module";
-import { ConfigModule } from "@nestjs/config";
-import { BuildModule } from "./build/build.module";
-import { StepModule } from "./step/step.module";
-import { UserModule } from "./user/user.module";
-import { RequestLoggerMiddleware } from "middleware/logger";
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from "@nestjs/core";
-import { AtGuard } from "./common/guards";
+import { AtGuard } from './common/guards';
+import { PrismaModule } from './prisma/prisma.module';
+import { RequestLoggerMiddleware } from 'middleware/logger';
+import { BuildModule } from './build/build.module';
+import { StepModule } from './step/step.module';
+import { UserModule } from './user/user.module';
 
 @Module({
 	imports: [

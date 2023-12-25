@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateBuildDto } from "./dto/create-build.dto";
 import { UpdateBuildDto } from "./dto/update-build.dto";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -9,10 +9,19 @@ export class BuildService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	async create(createBuild: CreateBuildDto) {
-		const { user_id } = createBuild;
-		await this.prismaService.build.create({
-			data: { ...createBuild, user_id: +user_id }
-		});
+		try {
+			const { user_id } = createBuild;
+			await this.prismaService.build.create({
+				data: { ...createBuild, user_id: +user_id }
+			});
+		} catch (error) {
+			throw new ConflictException({
+				statusCode: HttpStatus.CONFLICT,
+				message:
+					error.message
+			});
+		}
+
 	}
 
 	async findAll(race?: Race) {
@@ -23,6 +32,14 @@ export class BuildService {
 				}
 			}
 		);
+	}
+
+	async findAllOfOneUser(user_id?: number) {
+		return this.prismaService.build.findMany({
+			where: {
+				user_id,
+			}
+		})
 	}
 
 	async findOne(id: number) {

@@ -12,6 +12,7 @@ import { BuildService } from "./build.service";
 import { CreateBuildDto } from "./dto/create-build.dto";
 import { UpdateBuildDto } from "./dto/update-build.dto";
 import { Race } from "@prisma/client";
+import { GetCurrentUserId } from "src/common/decorators";
 
 @Controller("build")
 export class BuildController {
@@ -22,10 +23,17 @@ export class BuildController {
 		return this.buildService.create(createBuild);
 	}
 
+	@Post("me")
+	findAllOfOneUser(@GetCurrentUserId() userId: number) {
+		return this.buildService.findAllOfOneUser(userId);
+	}
+
+
 	@Get()
 	findAll(@Query("race") race?: Race) {
 		return this.buildService.findAll(race);
 	}
+
 
 	@Get(":id")
 	findOne(@Param("id") id: string) {
