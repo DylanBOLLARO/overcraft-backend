@@ -27,6 +27,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - AT_SECRET=${AT_SECRET}
+      - RT_SECRET=${RT_SECRET}
     volumes:
       - ./src:/app/src
 
