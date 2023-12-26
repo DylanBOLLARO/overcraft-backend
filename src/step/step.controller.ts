@@ -21,25 +21,25 @@ export class StepController {
 		return this.stepService.create(createStep);
 	}
 
-	@Get()
-	findAll() {
-		return this.stepService.findAll();
+	@Get(":id")
+	find_all_by_build_id(@Param("id") build_id: string) {
+		return this.stepService.findAll(+build_id);
 	}
 
-	@Get(":id")
-	findOne(@Param("id") id: string) {
-		return this.stepService.findOne(+id);
-	}
+	// @Get(":id")
+	// findOne(@Param("id") id: string) {
+	// 	return this.stepService.findOne(+id);
+	// }
 
 	@Patch("move-position")
 	movePosition(@Body() movePositionStep: MovePositionStepDto) {
 		return this.stepService.movePosition(movePositionStep);
 	}
 
-	@Patch(":id")
-	update(@Param("id") id: string, @Body() updateStepDto: UpdateStepDto) {
-		return this.stepService.update(+id, updateStepDto);
-	}
+	// @Patch(":id")
+	// update(@Param("id") id: string, @Body() updateStepDto: UpdateStepDto) {
+	// 	return this.stepService.update(+id, updateStepDto);
+	// }
 
 	@Delete(":id")
 	delete(@Param("id") id: string) {

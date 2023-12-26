@@ -23,17 +23,15 @@ export class BuildController {
 		return this.buildService.create(createBuild);
 	}
 
-	@Post("me")
+	@Get()
 	findAllOfOneUser(@GetCurrentUserId() userId: number) {
 		return this.buildService.findAllOfOneUser(userId);
 	}
 
-
-	@Get()
-	findAll(@Query("race") race?: Race) {
-		return this.buildService.findAll(race);
-	}
-
+	// @Get()
+	// findAll(@Query("race") race?: Race) {
+	// 	return this.buildService.findAll(race);
+	// }
 
 	@Get(":id")
 	findOne(@Param("id") id: string) {
@@ -47,6 +45,7 @@ export class BuildController {
 
 	@Delete(":id")
 	delete(@Param("id") id: string) {
+		console.log(id);
 		return this.buildService.delete(+id);
 	}
 }

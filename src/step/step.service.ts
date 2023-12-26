@@ -19,6 +19,8 @@ export class StepService {
 
 	async create(createStep: CreateStepDto) {
 		const { build_id, position, timer, population } = createStep;
+		console.log(createStep);
+
 		await this.prismaService.build_step.create({
 			data: {
 				...createStep,
@@ -30,8 +32,12 @@ export class StepService {
 		});
 	}
 
-	async findAll() {
-		return this.prismaService.build_step.findMany();
+	async findAll(build_id: number) {
+		return this.prismaService.build_step.findMany({
+			where: {
+				build_id
+			}
+		});
 	}
 
 	async findOne(id: number) {
@@ -61,6 +67,7 @@ export class StepService {
 	async movePosition(movePositionStep: MovePositionStepDto) {
 		const { id, build_id, move } = movePositionStep;
 
+		console.log(id, build_id, move);
 		try {
 			const init_step =
 				await this.prismaService.build_step.findFirstOrThrow({
