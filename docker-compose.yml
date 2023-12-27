@@ -4,7 +4,7 @@ services:
   postgres:
     container_name: postgres
     image: postgres:latest
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - '5432'
+      - '5432:5432'
     networks:
       - overcraft
 
@@ -23,7 +23,7 @@ services:
     container_name: nestjs
     restart: always
     ports:
-      - '3001'
+      - '3001:3001'
     depends_on:
       - postgres
     environment:

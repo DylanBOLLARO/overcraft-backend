@@ -24,7 +24,7 @@ model Build_step {
   description String @db.VarChar(150)
   population  Int
   timer       Int
-  position    Int    @unique
+  position    Int 
   build_id    Int
   build       Build  @relation(fields: [build_id], references: [id], onDelete: Cascade)
 
