@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - '5678:5432'
+      - '5432'
     networks:
       - overcraft
 
@@ -23,15 +23,13 @@ services:
     container_name: nestjs
     restart: always
     ports:
-      - '3001:3001'
+      - '3001'
     depends_on:
       - postgres
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - AT_SECRET=${AT_SECRET}
       - RT_SECRET=${RT_SECRET}
-    volumes:
-      - ./src:/app/src
     networks:
       - overcraft
 
