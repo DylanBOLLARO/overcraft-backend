@@ -10,7 +10,7 @@ datasource db {
 model Build {
   id          Int          @id @default(autoincrement())
   title       String       @db.VarChar(150)
-  description String?      @db.VarChar(150)
+  description String?
   race        Race
   v_race      Race
   user_id     Int

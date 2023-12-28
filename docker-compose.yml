@@ -11,7 +11,7 @@ services:
         volumes:
             - postgres:/var/lib/postgresql/data
         ports:
-            - 16987:5432
+            - 127.0.0.1:16987:5432  # Bind only to localhost
         networks:
             - postgresql
 
