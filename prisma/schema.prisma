@@ -11,11 +11,15 @@ model Build {
   id          Int          @id @default(autoincrement())
   title       String       @db.VarChar(150)
   description String?
-  race        Race
-  v_race      Race
+  race        Race         @default(NULL)
+  v_race      Race         @default(NULL)
   user_id     Int
-  user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  public      Boolean?     @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   build_step  Build_step[]
+  user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
   @@map("builds")
 }
 
@@ -24,7 +28,7 @@ model Build_step {
   description String @db.VarChar(150)
   population  Int
   timer       Int
-  position    Int 
+  position    Int
   build_id    Int
   build       Build  @relation(fields: [build_id], references: [id], onDelete: Cascade)
 
@@ -57,4 +61,5 @@ enum Race {
   ZERG
   TERRAN
   PROTOSS
+  NULL
 }

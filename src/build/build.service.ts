@@ -11,7 +11,7 @@ export class BuildService {
 	async create(createBuild: CreateBuildDto) {
 		try {
 			const { user_id } = createBuild;
-			await this.prismaService.build.create({
+			return await this.prismaService.build.create({
 				data: { ...createBuild, user_id: +user_id }
 			});
 		} catch (error) {
