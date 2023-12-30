@@ -6,14 +6,13 @@ import {
 	Patch,
 	Param,
 	Delete,
-	Query
+	Query,
+	Logger
 } from "@nestjs/common";
 import { BuildService } from "./build.service";
 import { CreateBuildDto } from "./dto/create-build.dto";
 import { UpdateBuildDto } from "./dto/update-build.dto";
-import { Race } from "@prisma/client";
-import { GetCurrentUserId } from "src/common/decorators";
-
+import { GetCurrentUserId, Public } from "src/common/decorators";
 @Controller("build")
 export class BuildController {
 	constructor(private readonly buildService: BuildService) {}
@@ -28,11 +27,13 @@ export class BuildController {
 		return this.buildService.findAllOfOneUser(userId);
 	}
 
-	// @Get()
-	// findAll(@Query("race") race?: Race) {
-	// 	return this.buildService.findAll(race);
-	// }
+	@Public()
+	@Get("all")
+	findAll() {
+		return this.buildService.findAll();
+	}
 
+	@Public()
 	@Get(":id")
 	findOne(@Param("id") id: string) {
 		return this.buildService.findOne(+id);

@@ -14,7 +14,7 @@ model Build {
   race        Race         @default(NULL)
   v_race      Race         @default(NULL)
   user_id     Int
-  public      Boolean?     @default(false)
+  is_public   Boolean     @default(false)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   build_step  Build_step[]
@@ -62,4 +62,5 @@ enum Race {
   TERRAN
   PROTOSS
   NULL
+  ALL
 }

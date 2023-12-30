@@ -2,7 +2,6 @@ import { ConflictException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateBuildDto } from "./dto/create-build.dto";
 import { UpdateBuildDto } from "./dto/update-build.dto";
 import { PrismaService } from "src/prisma/prisma.service";
-import { Prisma, Race } from "@prisma/client";
 
 @Injectable()
 export class BuildService {
@@ -21,17 +20,14 @@ export class BuildService {
 					error.message
 			});
 		}
-
 	}
 
-	async findAll(race?: Race) {
-		return this.prismaService.build.findMany(
-			race && {
-				where: {
-					race
-				}
+	async findAll() {
+		return this.prismaService.build.findMany({
+			where: {
+				is_public: true
 			}
-		);
+		});
 	}
 
 	async findAllOfOneUser(user_id?: number) {
@@ -43,6 +39,7 @@ export class BuildService {
 	}
 
 	async findOne(id: number) {
+		console.log(id);
 		return this.prismaService.build.findUniqueOrThrow({
 			where: {
 				id
@@ -51,12 +48,14 @@ export class BuildService {
 	}
 
 	async update(id: number, updateBuild: UpdateBuildDto) {
-		const { user_id } = updateBuild;
+		const { user_id, is_public } = updateBuild;
 		return this.prismaService.build.update({
 			where: {
 				id
 			},
-			data: { ...updateBuild, user_id: +user_id }
+			data: {
+				...updateBuild, user_id: +user_id, is_public: "" + is_public === "true"
+			}
 		});
 	}
 
