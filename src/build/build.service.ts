@@ -39,7 +39,6 @@ export class BuildService {
 	}
 
 	async findOne(id: number) {
-		console.log(id);
 		return this.prismaService.build.findUniqueOrThrow({
 			where: {
 				id

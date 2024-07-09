@@ -6,12 +6,12 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	app.enableCors({
 		origin: ["127.0.0.1:3000", "127.0.0.1", "overcraft.ovh", "localhost", "localhost:3000"],
-		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+		methods: "*",
 		credentials: true,
 		allowedHeaders: "Content-Type,Authorization",
 	});
 
 	app.useGlobalPipes(new ValidationPipe());
-	await app.listen(3001);
+	await app.listen(5000);
 }
 bootstrap();

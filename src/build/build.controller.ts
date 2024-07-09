@@ -46,7 +46,6 @@ export class BuildController {
 
 	@Delete(":id")
 	delete(@Param("id") id: string) {
-		console.log(id);
 		return this.buildService.delete(+id);
 	}
 }
