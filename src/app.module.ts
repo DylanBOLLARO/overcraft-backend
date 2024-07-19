@@ -1,13 +1,13 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthModule } from './auth/auth.module';
-import { AtGuard } from './common/guards';
-import { PrismaModule } from './prisma/prisma.module';
-import { RequestLoggerMiddleware } from 'middleware/logger';
-import { BuildModule } from './build/build.module';
-import { StepModule } from './step/step.module';
-import { UserModule } from './user/user.module';
+import { MiddlewareConsumer, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { APP_GUARD } from "@nestjs/core";
+import { AuthModule } from "./auth/auth.module";
+import { AtGuard } from "./common/guards";
+import { PrismaModule } from "./prisma/prisma.module";
+import { LoggerMiddleware } from "middleware/logger";
+import { BuildModule } from "./build/build.module";
+import { StepModule } from "./step/step.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
 	imports: [
@@ -22,13 +22,12 @@ import { UserModule } from './user/user.module';
 	providers: [
 		{
 			provide: APP_GUARD,
-			useClass: AtGuard,
-		},
-	],
-
+			useClass: AtGuard
+		}
+	]
 })
 export class AppModule {
 	configure(consumer: MiddlewareConsumer) {
-		consumer.apply(RequestLoggerMiddleware).forRoutes("*");
+		consumer.apply(LoggerMiddleware).forRoutes("*");
 	}
 }

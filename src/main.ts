@@ -9,11 +9,11 @@ async function bootstrap() {
 		origin: true,
 		methods: ["GET", "POST", "PUT", "DELETE", "HEAD", "PATCH"],
 		credentials: true,
-		allowedHeaders: "Content-Type,Authorization",
-
+		allowedHeaders: "Content-Type,Authorization"
 	});
 
 	app.useGlobalPipes(new ValidationPipe());
 	await app.listen(25000);
+	console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

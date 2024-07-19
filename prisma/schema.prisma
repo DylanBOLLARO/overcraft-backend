@@ -14,7 +14,7 @@ model Build {
   race        Race         @default(NULL)
   v_race      Race         @default(NULL)
   user_id     Int
-  is_public   Boolean     @default(false)
+  is_public   Boolean      @default(false)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   build_step  Build_step[]
@@ -36,17 +36,21 @@ model Build_step {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  firstName String?  @db.VarChar(255)
-  lastName  String?  @db.VarChar(255)
-  username  String   @db.VarChar(55)
-  email     String   @unique @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(GUEST)
-  hashedRt  String?
-  build     Build[]
+  id               Int       @id @default(autoincrement())
+  first_name       String?
+  last_name        String?
+  username         String
+  email            String    @unique
+  password         String
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  role             Role      @default(GUEST)
+  refresh_token    String?
+  access_token     String?
+  token_expires_at DateTime?
+  id_token         Int?
+
+  build Build[]
 
   @@map("users")
 }
