@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
     postgres:
         container_name: postgres
@@ -56,7 +56,6 @@ volumes:
             o: bind
             device: ./data
     pgadmin_data:
-
 
 networks:
     overcraft:

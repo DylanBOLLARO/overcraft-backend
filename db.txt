@@ -1,0 +1,77 @@
+Table user {
+  id integer [primary key]
+  firstName varchar
+  lastName varchar
+  username varchar
+  email varchar
+  password varchar
+  createdAt date
+  updatedAt date
+  role varchar
+  refresh_token varchar
+}
+
+Table build {
+  id integer [primary key]
+  user_id integer
+  title varchar
+  description varchar
+  race varchar
+  v_race varchar
+  is_public bool
+  createdAt date
+  updatedAt date
+  difficulty integer // 1 à 5
+  type varchar
+
+}
+
+Table build_step {
+  id integer [primary key]
+  build_id integer
+  description varchar
+  population varchar
+  timer varchar
+  position bool
+}
+
+
+Table like_build {
+  id integer [primary key]
+  user_id integer
+  build_id integer
+  created_at date
+}
+
+Table comment {
+  id integer [primary key]
+  user_id integer
+  build_id integer
+  content varchar
+  created_at date
+  updatedAt date
+}
+
+Table like_comment {
+  id integer [primary key]
+  user_id integer
+  comment_id integer
+  created_at date
+}
+
+
+Ref: build.user_id > user.id // many-to-one
+
+Ref: "build"."id" < "build_step"."build_id"
+
+Ref: "user"."id" < "like_build"."user_id"
+
+Ref: "build"."id" < "like_build"."build_id"
+
+Ref: "user"."id" < "comment"."user_id"
+
+Ref: "build"."id" < "comment"."build_id"
+
+Ref: "user"."id" < "like_comment"."user_id"
+
+Ref: "comment"."id" < "like_comment"."comment_id"

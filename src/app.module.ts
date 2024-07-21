@@ -8,6 +8,9 @@ import { LoggerMiddleware } from "middleware/logger";
 import { BuildModule } from "./build/build.module";
 import { StepModule } from "./step/step.module";
 import { UserModule } from "./user/user.module";
+import { LikeModule } from "./like/like.module";
+import { BuildPublicModule } from "./build-public/build-public.module";
+import { BuildPrivateModule } from "./build-private/build-private.module";
 
 @Module({
 	imports: [
@@ -16,7 +19,10 @@ import { UserModule } from "./user/user.module";
 		BuildModule,
 		StepModule,
 		UserModule,
-		AuthModule
+		AuthModule,
+		LikeModule,
+		BuildPublicModule,
+		BuildPrivateModule
 	],
 	controllers: [],
 	providers: [

@@ -22,40 +22,34 @@ export class BuildController {
 	constructor(private readonly buildService: BuildService) {}
 
 	@Public()
-	@Get("all")
+	@Get("public/all/:userId")
+	async getAllPublicBuildsOfUserByUserId(@Param("userId") userId: any) {
+		return await this.buildService.getAllPublicBuildsOfUserByUserId(userId);
+	}
+
+	@Public()
+	@Get("public/all")
 	async getAllPublicBuilds() {
 		return await this.buildService.getAllPublicBuilds();
 	}
 
-	@Public()
+	@UseGuards(AtGuard)
 	@Get(":id")
-	getPublicBuildById(@Param("id", ParseIntPipe) buildId: number) {
+	getBuildById(
+		@Param("id", ParseIntPipe) buildId: number,
+		@GetCurrentUserId() userId: number
+	) {
 		return this.buildService.getBuildById(buildId);
-	}
-
-	// @Public()
-	// @Get(":id")
-	// findOne(@Param("id") id: string) {
-	// 	return this.buildService.findOne(+id);
-	// }
-
-	// OVERCRAFT V2:
-	// @Public()
-	// @Get("config/:config")
-	// findBuildsByConfig(@Param("config") config: string) {
-	// 	return this.buildService.findBuildsByConfig(
-	// 		qs.parse(config, { delimiter: ";" })
-	// 	);
-	// }
-
-	@Post()
-	create(@Body() createBuild: CreateBuildDto) {
-		return this.buildService.create(createBuild);
 	}
 
 	@Get()
 	findAllOfOneUser(@GetCurrentUserId() userId: number) {
 		return this.buildService.findAllOfOneUser(userId);
+	}
+
+	@Post()
+	create(@Body() createBuild: CreateBuildDto) {
+		return this.buildService.create(createBuild);
 	}
 
 	@Patch(":id")

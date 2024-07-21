@@ -32,7 +32,6 @@ export class StepController {
 		return this.stepService.movePosition(movePositionStep);
 	}
 
-
 	@Delete(":id")
 	delete(@Param("id") id: string) {
 		return this.stepService.delete(+id);

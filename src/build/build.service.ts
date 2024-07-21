@@ -77,16 +77,6 @@ export class BuildService {
 	}
 
 	// OVERCRAFT V2:
-	// async findBuildsByConfig(config: any) {
-	// 	const { id } = config;
-	// 	return await this.prismaService.build.findUnique({
-	// 		where: {
-	// 			id: +id,
-	// 			is_public: true
-	// 		}
-	// 	});
-	// }
-
 	async getAllPublicBuilds() {
 		return await this.prismaService.build.findMany({
 			where: {
@@ -95,12 +85,29 @@ export class BuildService {
 		});
 	}
 
+	async getAllPublicBuildsOfUserByUserId(userId: any) {
+		return await this.prismaService.build.findMany({
+			where: {
+				user_id: +userId,
+				is_public: true
+			}
+		});
+	}
+
+	async getPublicBuildById(buildId: number) {
+		return await this.prismaService.build.findUnique({
+			where: {
+				id: buildId,
+				is_public: true
+			}
+		});
+	}
+
 	async getBuildById(buildId: number) {
-		const build = await this.prismaService.build.findUnique({
+		return await this.prismaService.build.findUnique({
 			where: {
 				id: buildId
 			}
 		});
-		if (build.is_public) return build;
 	}
 }

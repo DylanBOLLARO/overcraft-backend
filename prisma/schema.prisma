@@ -61,6 +61,7 @@ model User {
   Comment Comment[]
   Build   Build[]   @relation("userRelation")
   Created Build[]   @relation("creatorRelation")
+  Like    Like[]
 
   @@map("users")
 }
@@ -86,7 +87,9 @@ model Like {
   updated_at DateTime @updatedAt
   comment_id Int
   build_id   Int?
+  user_id    Int
 
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   comment Comment @relation(fields: [comment_id], references: [id], onDelete: Cascade)
   Build   Build?  @relation(fields: [build_id], references: [id])
 
