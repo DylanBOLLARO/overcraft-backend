@@ -20,7 +20,7 @@ export class StepService {
 	async create(createStep: CreateStepDto) {
 		const { build_id, position, timer, population } = createStep;
 
-		await this.prismaService.build_step.create({
+		await this.prismaService.step.create({
 			data: {
 				...createStep,
 				build_id: +build_id,
@@ -32,7 +32,7 @@ export class StepService {
 	}
 
 	async findAll(build_id: number) {
-		return this.prismaService.build_step.findMany({
+		return this.prismaService.step.findMany({
 			where: {
 				build_id
 			}
@@ -40,7 +40,7 @@ export class StepService {
 	}
 
 	async findOne(id: number) {
-		return this.prismaService.build_step.findUniqueOrThrow({
+		return this.prismaService.step.findUniqueOrThrow({
 			where: {
 				id
 			}
@@ -49,7 +49,7 @@ export class StepService {
 
 	async update(id: number, updateStep: UpdateStepDto) {
 		const { build_id, position, timer, population } = updateStep;
-		await this.prismaService.build_step.update({
+		await this.prismaService.step.update({
 			where: {
 				id
 			},
@@ -67,20 +67,19 @@ export class StepService {
 		const { id, build_id, move } = movePositionStep;
 
 		try {
-			const init_step =
-				await this.prismaService.build_step.findFirstOrThrow({
-					where: {
-						build_id: +build_id,
-						id: +id
-					},
-					select: {
-						id: true,
-						position: true
-					},
-					take: 1
-				});
+			const init_step = await this.prismaService.step.findFirstOrThrow({
+				where: {
+					build_id: +build_id,
+					id: +id
+				},
+				select: {
+					id: true,
+					position: true
+				},
+				take: 1
+			});
 
-			const move_step = await this.prismaService.build_step.findFirst({
+			const move_step = await this.prismaService.step.findFirst({
 				where: {
 					build_id: +build_id,
 					position: this.should_up_position(move)
@@ -104,7 +103,7 @@ export class StepService {
 				});
 			}
 
-			await this.prismaService.build_step.update({
+			await this.prismaService.step.update({
 				where: {
 					id: +move_step.id,
 					position: +move_step.position
@@ -112,7 +111,7 @@ export class StepService {
 				data: { position: -1 }
 			});
 
-			await this.prismaService.build_step.update({
+			await this.prismaService.step.update({
 				where: {
 					id: +init_step.id,
 					position: +init_step.position
@@ -120,7 +119,7 @@ export class StepService {
 				data: { position: move_step.position }
 			});
 
-			await this.prismaService.build_step.update({
+			await this.prismaService.step.update({
 				where: {
 					id: +move_step.id,
 					position: -1
@@ -135,7 +134,7 @@ export class StepService {
 	}
 
 	async delete(id: number) {
-		return this.prismaService.build_step.delete({
+		return this.prismaService.step.delete({
 			where: {
 				id
 			}

@@ -8,23 +8,30 @@ datasource db {
 }
 
 model Build {
-  id          Int          @id @default(autoincrement())
-  title       String       @db.VarChar(150)
+  id          Int      @id @unique @default(autoincrement())
+  title       String   @db.VarChar(150)
   description String?
-  race        Race         @default(NULL)
-  v_race      Race         @default(NULL)
+  slug        String?
+  race        Race     @default(NULL)
+  v_race      Race     @default(NULL)
+  is_public   Boolean  @default(false)
+  created_at  DateTime @default(now())
+  created_by  Int
+  updated_at  DateTime @updatedAt
   user_id     Int
-  is_public   Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  build_step  Build_step[]
-  user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  user    User @relation(fields: [user_id], references: [id], onDelete: Cascade, name: "userRelation")
+  created User @relation(fields: [created_by], references: [id], onDelete: Cascade, name: "creatorRelation")
+
+  steps   Step[]
+  Comment Comment[]
+  Like    Like[]
 
   @@map("builds")
 }
 
-model Build_step {
-  id          Int    @id @default(autoincrement())
+model Step {
+  id          Int    @id @unique @default(autoincrement())
   description String @db.VarChar(150)
   population  Int
   timer       Int
@@ -32,14 +39,15 @@ model Build_step {
   build_id    Int
   build       Build  @relation(fields: [build_id], references: [id], onDelete: Cascade)
 
-  @@map("build_steps")
+  @@map("steps")
 }
 
 model User {
-  id               Int       @id @default(autoincrement())
+  id               Int       @id @unique @default(autoincrement())
+  description      String?
   first_name       String?
   last_name        String?
-  username         String
+  username         String    @unique
   email            String    @unique
   password         String
   created_at       DateTime  @default(now())
@@ -50,9 +58,39 @@ model User {
   token_expires_at DateTime?
   id_token         Int?
 
-  build Build[]
+  Comment Comment[]
+  Build   Build[]   @relation("userRelation")
+  Created Build[]   @relation("creatorRelation")
 
   @@map("users")
+}
+
+model Comment {
+  id         Int      @id @unique @default(autoincrement())
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  build_id   Int
+  user_id    Int
+  build      Build    @relation(fields: [build_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Like       Like[]
+
+  @@map("comments")
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  comment_id Int
+  build_id   Int?
+
+  comment Comment @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  Build   Build?  @relation(fields: [build_id], references: [id])
+
+  @@map("likes")
 }
 
 enum Role {

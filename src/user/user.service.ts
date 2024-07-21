@@ -42,6 +42,21 @@ export class UserService {
 		});
 	}
 
+	async findOneByUsername(username: string) {
+		const user = await this.prismaService.user.findMany({
+			where: {
+				username
+			},
+			select: {
+				username: true,
+				created_at: true,
+				role: true
+			}
+		});
+		console.log(user);
+		return user.length === 1 ? user[0] : undefined;
+	}
+
 	async update(id: number, updateEmployee: Prisma.UserUpdateInput) {
 		return this.prismaService.user.update({
 			where: {
@@ -77,5 +92,25 @@ export class UserService {
 				role: true
 			}
 		});
+	}
+	// OVERCRAFT V2:
+	async findUserByConfig(config: any) {
+		const { id, username } = config;
+
+		if (username) {
+			const user = await this.prismaService.user.findMany({
+				where: {
+					username: {
+						mode: "insensitive"
+					}
+				}
+			});
+			if (user.length === 1) return user[0];
+		} else if (id)
+			return await this.prismaService.user.findUniqueOrThrow({
+				where: {
+					id
+				}
+			});
 	}
 }

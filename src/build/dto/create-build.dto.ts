@@ -15,6 +15,13 @@ export class CreateBuildDto {
 	readonly v_race: Race;
 
 	@IsNotEmpty()
+	readonly slug: string;
+
+	@IsNotEmpty()
 	@IsNumberString()
 	readonly user_id: number;
+
+	@IsNotEmpty()
+	@IsNumberString()
+	readonly created_by: number;
 }
