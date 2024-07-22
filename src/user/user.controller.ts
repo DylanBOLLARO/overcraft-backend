@@ -1,60 +1,66 @@
 import {
 	Controller,
 	Get,
-	Post,
-	Body,
-	Patch,
 	Param,
 	Delete,
-	Query,
-	Req,
-	ConflictException,
-	HttpStatus
+	ParseIntPipe,
+	UseGuards
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { Role } from "@prisma/client";
-import { Request } from "express";
-import { Public } from "src/common/decorators";
-import * as qs from "qs";
+import { GetCurrentUserId, Public } from "src/common/decorators";
+import { AtGuard } from "src/common/guards";
 
 @Controller("user")
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
-	@Get()
-	findAll(@Query("role") role?: Role) {
-		return this.userService.findAll(role);
+	@Get() // get all users
+	findAll() {
+		return this.userService.findAll();
 	}
 
-	@Public()
-	@Get("username/:username")
+	@Get(":userId") // get one user
+	findOne(@Param("userId", ParseIntPipe) userId: number) {
+		return this.userService.findOne(userId);
+	}
+
+	@Get("username/:username") // get one user
 	findOneByUsername(@Param("username") username: string) {
-		return this.userService.findOneByUsername(username.toLowerCase());
+		return this.userService.findOneByUsername(username);
 	}
 
 	@Public()
-	@Get("config/:config")
-	findUserByConfig(@Param("config") config: string) {
-		return this.userService.findUserByConfig(
-			qs.parse(config, { delimiter: ";" })
+	@UseGuards(AtGuard)
+	@Get(":userId/build") // get all builds of one user
+	findAllBuildsOfUser(
+		@GetCurrentUserId() connectedUserId: number,
+		@Param("userId", ParseIntPipe) userId: number
+	) {
+		return this.userService.findAllBuildsOfUser(userId, connectedUserId);
+	}
+
+	@Public()
+	@UseGuards(AtGuard)
+	@Get(":userId/build/:buildId") // get one build of one user
+	findOneBuildOfUser(
+		@GetCurrentUserId() connectedUserId: number,
+		@Param("userId", ParseIntPipe) userId: number,
+		@Param("buildId", ParseIntPipe) buildId: number
+	) {
+		return this.userService.findOneBuildOfUser(
+			userId,
+			buildId,
+			connectedUserId
 		);
 	}
 
-	@Get(":id")
-	findOne(@Param("id") id: string) {
-		console.log("first");
-		return this.userService.findOne(+id);
-	}
-
-	// @Patch(":id")
+	// @Patch(":id") // update one user
 	// update(@Param("id") id: string, @Body() updateUser: UpdateUserDto) {
 	// 	return this.userService.update(+id, updateUser);
 	// }
 
-	@Delete(":id")
-	delete(@Param("id") id: string) {
-		return this.userService.delete(+id);
+	@Delete(":userId") // delete one user
+	delete(@Param("userId", ParseIntPipe) userId: number) {
+		return this.userService.delete(userId);
 	}
 }

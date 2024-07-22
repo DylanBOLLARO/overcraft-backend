@@ -5,24 +5,20 @@ import { AuthModule } from "./auth/auth.module";
 import { AtGuard } from "./common/guards";
 import { PrismaModule } from "./prisma/prisma.module";
 import { LoggerMiddleware } from "middleware/logger";
-import { BuildModule } from "./build/build.module";
 import { StepModule } from "./step/step.module";
 import { UserModule } from "./user/user.module";
 import { LikeModule } from "./like/like.module";
-import { BuildPublicModule } from "./build-public/build-public.module";
-import { BuildPrivateModule } from "./build-private/build-private.module";
+import { BuildModule } from "./build/build.module";
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({ isGlobal: true }),
 		PrismaModule,
-		BuildModule,
 		StepModule,
 		UserModule,
 		AuthModule,
 		LikeModule,
-		BuildPublicModule,
-		BuildPrivateModule
+		BuildModule
 	],
 	controllers: [],
 	providers: [

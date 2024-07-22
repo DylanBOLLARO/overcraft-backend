@@ -42,6 +42,7 @@ export class AuthController {
 	@Post("get-connected-user-id")
 	@HttpCode(HttpStatus.OK)
 	async me(@GetCurrentUserId() userId: any) {
+		console.log(userId);
 		return await this.authService.me(userId);
 	}
 

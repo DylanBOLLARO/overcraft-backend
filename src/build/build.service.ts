@@ -1,6 +1,5 @@
 import { ConflictException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateBuildDto } from "./dto/create-build.dto";
-import { UpdateBuildDto } from "./dto/update-build.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { slugify } from "src/utils";
 
@@ -26,88 +25,79 @@ export class BuildService {
 				slug: slugify(build_id, title)
 			};
 
-			await this.update(build_id, patch);
+			this.update(build_id, patch);
 
 			return { ...created_build, ...patch };
-		} catch (error) {
-			console.error(error);
-			throw new ConflictException({
+		} catch ({ message }) {
+			const err = {
 				statusCode: HttpStatus.CONFLICT,
-				message: error.message
-			});
+				message
+			};
+			console.error(err);
+			throw new ConflictException(err);
 		}
 	}
 
-	async findAllOfOneUser(user_id?: number) {
-		return this.prismaService.build.findMany({
-			where: {
-				user_id
-			}
-		});
+	async findAll() {
+		try {
+			return await this.prismaService.build.findMany({
+				where: {
+					is_public: true
+				}
+			});
+		} catch ({ message }) {
+			const err = {
+				statusCode: HttpStatus.CONFLICT,
+				message
+			};
+			console.error(err);
+			throw new ConflictException(err);
+		}
 	}
 
 	async findOne(id: number) {
-		return this.prismaService.build.findUniqueOrThrow({
-			where: {
-				id: +id
-			}
-		});
+		try {
+			return await this.prismaService.build.findUniqueOrThrow({
+				where: {
+					is_public: true,
+					id
+				}
+			});
+		} catch ({ message }) {
+			const err = {
+				statusCode: HttpStatus.CONFLICT,
+				message
+			};
+			console.error(err);
+			throw new ConflictException(err);
+		}
 	}
 
-	async update(id: number, updateBuild: any) {
-		const { user_id, is_public } = updateBuild;
-		return this.prismaService.build.update({
-			where: {
-				id
-			},
-			data: {
-				...updateBuild,
-				user_id: +user_id,
-				is_public: "" + is_public === "true"
-			}
-		});
+	async update(id: number, updateBuildDto: any) {
+		try {
+			const { user_id, is_public } = updateBuildDto;
+
+			return this.prismaService.build.update({
+				where: {
+					id
+				},
+				data: {
+					...updateBuildDto,
+					user_id: +user_id,
+					is_public: "" + is_public === "true"
+				}
+			});
+		} catch ({ message }) {
+			const err = {
+				statusCode: HttpStatus.CONFLICT,
+				message
+			};
+			console.error(err);
+			throw new ConflictException(err);
+		}
 	}
 
-	async delete(id: number) {
-		return this.prismaService.build.delete({
-			where: {
-				id
-			}
-		});
-	}
-
-	// OVERCRAFT V2:
-	async getAllPublicBuilds() {
-		return await this.prismaService.build.findMany({
-			where: {
-				is_public: true
-			}
-		});
-	}
-
-	async getAllPublicBuildsOfUserByUserId(userId: any) {
-		return await this.prismaService.build.findMany({
-			where: {
-				user_id: +userId,
-				is_public: true
-			}
-		});
-	}
-
-	async getPublicBuildById(buildId: number) {
-		return await this.prismaService.build.findUnique({
-			where: {
-				id: buildId,
-				is_public: true
-			}
-		});
-	}
-
-	async getBuildById(buildId: number) {
-		return await this.prismaService.build.findUnique({
-			where: {
-				id: buildId
-			}
-		});
-	}
+	// remove(id: number) {
+	// 	return `This action removes a #${id} build`;
+	// }
 }

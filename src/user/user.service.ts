@@ -1,27 +1,26 @@
-import { ConflictException, HttpStatus, Injectable, Req } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { ConflictException, HttpStatus, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import * as bcrypt from "bcrypt";
-import { Prisma, Role } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class UserService {
 	constructor(private readonly prismaService: PrismaService) {}
+	selectConfig = {
+		select: {
+			id: true,
+			first_name: true,
+			last_name: true,
+			username: true,
+			email: true,
+			created_at: true,
+			updated_at: true,
+			role: true,
+			description: true
+		}
+	};
 
-	async findAll(role?: Role) {
-		return this.prismaService.user.findMany({
-			where: role ? { role } : undefined,
-			select: {
-				id: true,
-				first_name: true,
-				last_name: true,
-				username: true,
-				email: true,
-				created_at: true,
-				updated_at: true,
-				role: true
-			}
-		});
+	async findAll() {
+		return this.prismaService.user.findMany(this.selectConfig);
 	}
 
 	async findOne(id: number) {
@@ -29,32 +28,61 @@ export class UserService {
 			where: {
 				id
 			},
-			select: {
-				id: true,
-				first_name: true,
-				last_name: true,
-				username: true,
-				email: true,
-				created_at: true,
-				updated_at: true,
-				role: true
-			}
+			...this.selectConfig
 		});
 	}
 
 	async findOneByUsername(username: string) {
-		const user = await this.prismaService.user.findMany({
+		return this.prismaService.user.findFirstOrThrow({
 			where: {
-				username
+				username: {
+					equals: username,
+					mode: "insensitive"
+				}
 			},
-			select: {
-				username: true,
-				created_at: true,
-				role: true
-			}
+			...this.selectConfig
 		});
-		console.log(user);
-		return user.length === 1 ? user[0] : undefined;
+	}
+
+	async findAllBuildsOfUser(userId: number, connectedUserId: number) {
+		try {
+			return await this.prismaService.build.findMany({
+				where: {
+					user_id: userId,
+					...(connectedUserId !== userId && { is_public: true })
+				}
+			});
+		} catch ({ message }) {
+			const err = {
+				statusCode: HttpStatus.CONFLICT,
+				message
+			};
+			console.error(err);
+			throw new ConflictException(err);
+		}
+	}
+
+	async findOneBuildOfUser(
+		userId: number,
+		buildId: number,
+		connectedUserId: number
+	) {
+		try {
+			return await this.prismaService.build.findUniqueOrThrow({
+				where: {
+					id: buildId,
+					user_id: userId,
+					...(connectedUserId !== userId && { is_public: true })
+				}
+			});
+		} catch ({ message }) {
+			const err = {
+				statusCode: HttpStatus.CONFLICT,
+				message
+			};
+			console.error(err);
+			throw new ConflictException(err);
+		}
 	}
 
 	async update(id: number, updateEmployee: Prisma.UserUpdateInput) {
@@ -63,16 +91,7 @@ export class UserService {
 				id
 			},
 			data: updateEmployee,
-			select: {
-				id: true,
-				first_name: true,
-				last_name: true,
-				username: true,
-				email: true,
-				created_at: true,
-				updated_at: true,
-				role: true
-			}
+			...this.selectConfig
 		});
 	}
 
@@ -81,36 +100,7 @@ export class UserService {
 			where: {
 				id
 			},
-			select: {
-				id: true,
-				first_name: true,
-				last_name: true,
-				username: true,
-				email: true,
-				created_at: true,
-				updated_at: true,
-				role: true
-			}
+			...this.selectConfig
 		});
-	}
-	// OVERCRAFT V2:
-	async findUserByConfig(config: any) {
-		const { id, username } = config;
-
-		if (username) {
-			const user = await this.prismaService.user.findMany({
-				where: {
-					username: {
-						mode: "insensitive"
-					}
-				}
-			});
-			if (user.length === 1) return user[0];
-		} else if (id)
-			return await this.prismaService.user.findUniqueOrThrow({
-				where: {
-					id
-				}
-			});
 	}
 }

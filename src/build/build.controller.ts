@@ -5,60 +5,40 @@ import {
 	Body,
 	Patch,
 	Param,
-	Delete,
-	Query,
-	Logger,
-	ParseIntPipe,
-	UseGuards
+	Delete
 } from "@nestjs/common";
 import { BuildService } from "./build.service";
 import { CreateBuildDto } from "./dto/create-build.dto";
 import { UpdateBuildDto } from "./dto/update-build.dto";
-import { GetCurrentUserId, Public } from "src/common/decorators";
-import { AtGuard } from "src/common/guards";
+import { Public } from "src/common/decorators";
 
+@Public()
 @Controller("build")
 export class BuildController {
 	constructor(private readonly buildService: BuildService) {}
 
-	@Public()
-	@Get("public/all/:userId")
-	async getAllPublicBuildsOfUserByUserId(@Param("userId") userId: any) {
-		return await this.buildService.getAllPublicBuildsOfUserByUserId(userId);
-	}
-
-	@Public()
-	@Get("public/all")
-	async getAllPublicBuilds() {
-		return await this.buildService.getAllPublicBuilds();
-	}
-
-	@UseGuards(AtGuard)
-	@Get(":id")
-	getBuildById(
-		@Param("id", ParseIntPipe) buildId: number,
-		@GetCurrentUserId() userId: number
-	) {
-		return this.buildService.getBuildById(buildId);
+	@Post()
+	create(@Body() createBuildDto: CreateBuildDto) {
+		return this.buildService.create(createBuildDto);
 	}
 
 	@Get()
-	findAllOfOneUser(@GetCurrentUserId() userId: number) {
-		return this.buildService.findAllOfOneUser(userId);
+	async findAll() {
+		return await this.buildService.findAll();
 	}
 
-	@Post()
-	create(@Body() createBuild: CreateBuildDto) {
-		return this.buildService.create(createBuild);
+	@Get(":id")
+	async findOne(@Param("id") id: string) {
+		return await this.buildService.findOne(+id);
 	}
 
-	@Patch(":id")
-	update(@Param("id") id: string, @Body() updateBuildDto: UpdateBuildDto) {
-		return this.buildService.update(+id, updateBuildDto);
-	}
+	// @Patch(':id')
+	// update(@Param('id') id: string, @Body() updateBuildDto: UpdateBuildDto) {
+	//   return this.buildService.update(+id, updateBuildDto);
+	// }
 
-	@Delete(":id")
-	delete(@Param("id") id: string) {
-		return this.buildService.delete(+id);
-	}
+	// @Delete(':id')
+	// remove(@Param('id') id: string) {
+	//   return this.buildService.remove(+id);
+	// }
 }
