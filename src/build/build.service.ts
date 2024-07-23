@@ -13,8 +13,7 @@ export class BuildService {
 			const created_build = await this.prismaService.build.create({
 				data: {
 					...createBuild,
-					user_id: +user_id,
-					created_by: +createBuild.created_by
+					user_id: +user_id
 				}
 			});
 
@@ -97,7 +96,11 @@ export class BuildService {
 		}
 	}
 
-	// remove(id: number) {
-	// 	return `This action removes a #${id} build`;
-	// }
+	async remove(id: number) {
+		return this.prismaService.build.delete({
+			where: {
+				id
+			}
+		});
+	}
 }

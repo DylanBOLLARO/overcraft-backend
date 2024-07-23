@@ -20,8 +20,4 @@ export class CreateBuildDto {
 	@IsNotEmpty()
 	@IsNumberString()
 	readonly user_id: number;
-
-	@IsNotEmpty()
-	@IsNumberString()
-	readonly created_by: number;
 }

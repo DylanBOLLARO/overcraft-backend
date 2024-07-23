@@ -10,6 +10,8 @@ import { UserService } from "./user.service";
 import { GetCurrentUserId, Public } from "src/common/decorators";
 import { AtGuard } from "src/common/guards";
 
+@Public()
+@UseGuards(AtGuard)
 @Controller("user")
 export class UserController {
 	constructor(private readonly userService: UserService) {}
@@ -29,24 +31,30 @@ export class UserController {
 		return this.userService.findOneByUsername(username);
 	}
 
-	@Public()
-	@UseGuards(AtGuard)
 	@Get(":userId/build") // get all builds of one user
-	findAllBuildsOfUser(
+	async findAllBuildsOfUser(
 		@GetCurrentUserId() connectedUserId: number,
 		@Param("userId", ParseIntPipe) userId: number
 	) {
-		return this.userService.findAllBuildsOfUser(userId, connectedUserId);
+		console.log("{ connectedUserId }");
+		console.log({ connectedUserId });
+		console.log({ userId });
+
+		return await this.userService.findAllBuildsOfUser(
+			userId,
+			connectedUserId
+		);
 	}
 
-	@Public()
-	@UseGuards(AtGuard)
 	@Get(":userId/build/:buildId") // get one build of one user
 	findOneBuildOfUser(
 		@GetCurrentUserId() connectedUserId: number,
 		@Param("userId", ParseIntPipe) userId: number,
 		@Param("buildId", ParseIntPipe) buildId: number
 	) {
+		console.log({ connectedUserId });
+		console.log({ userId });
+		console.log({ buildId });
 		return this.userService.findOneBuildOfUser(
 			userId,
 			buildId,

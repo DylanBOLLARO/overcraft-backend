@@ -16,12 +16,13 @@ model Build {
   v_race      Race     @default(NULL)
   is_public   Boolean  @default(false)
   created_at  DateTime @default(now())
-  created_by  Int
   updated_at  DateTime @updatedAt
   user_id     Int
+  picture_url String?
+  difficulty  Int?
+  type        String?
 
-  user    User @relation(fields: [user_id], references: [id], onDelete: Cascade, name: "userRelation")
-  created User @relation(fields: [created_by], references: [id], onDelete: Cascade, name: "creatorRelation")
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade, name: "userRelation")
 
   steps   Step[]
   Comment Comment[]
@@ -57,10 +58,10 @@ model User {
   access_token     String?
   token_expires_at DateTime?
   id_token         Int?
+  picture_url      String?
 
   Comment Comment[]
   Build   Build[]   @relation("userRelation")
-  Created Build[]   @relation("creatorRelation")
   Like    Like[]
 
   @@map("users")
@@ -75,30 +76,25 @@ model Comment {
   user_id    Int
   build      Build    @relation(fields: [build_id], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  Like       Like[]
 
   @@map("comments")
 }
 
 model Like {
   id         Int      @id @default(autoincrement())
-  content    String
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  comment_id Int
   build_id   Int?
   user_id    Int
 
-  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  comment Comment @relation(fields: [comment_id], references: [id], onDelete: Cascade)
-  Build   Build?  @relation(fields: [build_id], references: [id])
+  user  User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Build Build? @relation(fields: [build_id], references: [id])
 
   @@map("likes")
 }
 
 enum Role {
   GUEST
-  USER
+  MEMBER
   ADMIN
 }
 

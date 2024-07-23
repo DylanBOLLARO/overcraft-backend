@@ -8,8 +8,6 @@ import {
 	Delete
 } from "@nestjs/common";
 import { LikeService } from "./like.service";
-import { CreateLikeDto } from "./dto/create-like.dto";
-import { UpdateLikeDto } from "./dto/update-like.dto";
 import { Public } from "src/common/decorators";
 
 @Controller("like")
