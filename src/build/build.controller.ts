@@ -6,12 +6,13 @@ import {
 	Patch,
 	Param,
 	Delete,
-	UseGuards
+	UseGuards,
+	ParseIntPipe
 } from "@nestjs/common";
 import { BuildService } from "./build.service";
 import { CreateBuildDto } from "./dto/create-build.dto";
 import { UpdateBuildDto } from "./dto/update-build.dto";
-import { Public } from "src/common/decorators";
+import { GetCurrentUserId, Public } from "src/common/decorators";
 import { AtGuard } from "src/common/guards";
 
 @Public()
@@ -23,6 +24,17 @@ export class BuildController {
 	@Post()
 	create(@Body() createBuildDto: CreateBuildDto) {
 		return this.buildService.create(createBuildDto);
+	}
+
+	@Get(":buildId/step") // get all steps of one build
+	async findAllStepsOfBuild(
+		@GetCurrentUserId() connectedUserId: number,
+		@Param("buildId", ParseIntPipe) buildId: number
+	) {
+		return await this.buildService.findAllStepsOfBuild(
+			buildId,
+			connectedUserId
+		);
 	}
 
 	@Get()

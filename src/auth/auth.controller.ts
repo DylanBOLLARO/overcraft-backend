@@ -13,6 +13,8 @@ import { SignupAuthDto } from "./dto";
 import { SigninAuthDto } from "./dto/signin-auth.dto";
 import { AtGuard, RtGuard } from "src/common/guards";
 
+@Public()
+@UseGuards(AtGuard)
 @Controller("auth")
 export class AuthController {
 	constructor(private authService: AuthService) {}
@@ -42,7 +44,6 @@ export class AuthController {
 	@Post("get-connected-user-id")
 	@HttpCode(HttpStatus.OK)
 	async me(@GetCurrentUserId() userId: any) {
-		console.log(userId);
 		return await this.authService.me(userId);
 	}
 

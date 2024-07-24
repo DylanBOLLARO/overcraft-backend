@@ -5,11 +5,15 @@ import {
 	Body,
 	Patch,
 	Param,
-	Delete
+	Delete,
+	UseGuards
 } from "@nestjs/common";
 import { LikeService } from "./like.service";
 import { Public } from "src/common/decorators";
+import { AtGuard } from "src/common/guards";
 
+@Public()
+@UseGuards(AtGuard)
 @Controller("like")
 export class LikeController {
 	constructor(private readonly likeService: LikeService) {}
@@ -19,7 +23,6 @@ export class LikeController {
 	// 	return this.likeService.create(createLikeDto);
 	// }
 
-	@Public()
 	@Get("number/:id")
 	GetAllLikesOfUserByUserId(@Param("id") id: string) {
 		return this.likeService.GetAllLikesOfUserByUserId(+id);

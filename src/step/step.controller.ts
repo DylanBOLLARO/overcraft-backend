@@ -5,13 +5,17 @@ import {
 	Body,
 	Patch,
 	Param,
-	Delete
+	Delete,
+	UseGuards
 } from "@nestjs/common";
 import { StepService } from "./step.service";
 import { CreateStepDto } from "./dto/create-step.dto";
 import { MovePositionStepDto } from "./dto/move-position-step.dto";
 import { Public } from "src/common/decorators";
+import { AtGuard } from "src/common/guards";
 
+@Public()
+@UseGuards(AtGuard)
 @Controller("step")
 export class StepController {
 	constructor(private readonly stepService: StepService) {}
@@ -19,12 +23,6 @@ export class StepController {
 	@Post()
 	create(@Body() createStep: CreateStepDto) {
 		return this.stepService.create(createStep);
-	}
-
-	@Public()
-	@Get(":id")
-	find_all_by_build_id(@Param("id") build_id: string) {
-		return this.stepService.findAll(+build_id);
 	}
 
 	@Patch("move-position")

@@ -72,6 +72,42 @@ export class BuildService {
 		}
 	}
 
+	async findAllStepsOfBuild(buildId: number, connectedUserId: number) {
+		try {
+			const build = await this.prismaService.build.findUnique({
+				where: {
+					id: buildId
+				}
+			});
+			if (!build) {
+				throw new ConflictException({
+					statusCode: HttpStatus.BAD_REQUEST,
+					message: "This build does not exist"
+				});
+			}
+
+			if (build.is_public || connectedUserId === build.user_id) {
+				return await this.prismaService.step.findMany({
+					where: {
+						build_id: buildId
+					}
+				});
+			} else {
+				throw new ConflictException({
+					statusCode: HttpStatus.UNAUTHORIZED,
+					message: "Access Denied"
+				});
+			}
+		} catch ({ message }) {
+			const err = {
+				statusCode: HttpStatus.CONFLICT,
+				message
+			};
+			console.error(err);
+			throw new ConflictException(err);
+		}
+	}
+
 	async update(id: number, updateBuildDto: any) {
 		try {
 			const { user_id, is_public } = updateBuildDto;

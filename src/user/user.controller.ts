@@ -36,10 +36,6 @@ export class UserController {
 		@GetCurrentUserId() connectedUserId: number,
 		@Param("userId", ParseIntPipe) userId: number
 	) {
-		console.log("{ connectedUserId }");
-		console.log({ connectedUserId });
-		console.log({ userId });
-
 		return await this.userService.findAllBuildsOfUser(
 			userId,
 			connectedUserId
@@ -52,9 +48,6 @@ export class UserController {
 		@Param("userId", ParseIntPipe) userId: number,
 		@Param("buildId", ParseIntPipe) buildId: number
 	) {
-		console.log({ connectedUserId });
-		console.log({ userId });
-		console.log({ buildId });
 		return this.userService.findOneBuildOfUser(
 			userId,
 			buildId,
