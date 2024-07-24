@@ -60,6 +60,15 @@ export class BuildService {
 				where: {
 					is_public: true,
 					id
+				},
+				include: {
+					user: {
+						select: {
+							id: true,
+							username: true
+						}
+					},
+					steps: true
 				}
 			});
 		} catch ({ message }) {

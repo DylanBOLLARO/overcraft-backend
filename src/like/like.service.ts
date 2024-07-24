@@ -7,9 +7,11 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class LikeService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	// create(createLikeDto: CreateLikeDto) {
-	// 	return "This action adds a new like";
-	// }
+	create(createLikeDto: CreateLikeDto) {
+		return this.prismaService.like.create({
+			data: createLikeDto
+		});
+	}
 
 	async GetAllLikesOfUserByUserId(user_id: number) {
 		return (

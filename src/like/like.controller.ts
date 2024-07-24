@@ -6,11 +6,15 @@ import {
 	Patch,
 	Param,
 	Delete,
-	UseGuards
+	UseGuards,
+	ParseIntPipe,
+	UsePipes
 } from "@nestjs/common";
 import { LikeService } from "./like.service";
 import { Public } from "src/common/decorators";
 import { AtGuard } from "src/common/guards";
+import { CreateLikeDto } from "./dto/create-like.dto";
+import { ValidationPipe } from "./pipe/create.like.pipe";
 
 @Public()
 @UseGuards(AtGuard)
@@ -18,10 +22,11 @@ import { AtGuard } from "src/common/guards";
 export class LikeController {
 	constructor(private readonly likeService: LikeService) {}
 
-	// @Post()
-	// create(@Body() createLikeDto: CreateLikeDto) {
-	// 	return this.likeService.create(createLikeDto);
-	// }
+	@UsePipes(new ValidationPipe())
+	@Post()
+	create(@Body() createLikeDto: CreateLikeDto) {
+		return this.likeService.create(createLikeDto);
+	}
 
 	@Get("number/:id")
 	GetAllLikesOfUserByUserId(@Param("id") id: string) {

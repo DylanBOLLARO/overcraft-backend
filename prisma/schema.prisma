@@ -22,11 +22,11 @@ model Build {
   difficulty  Int?
   type        String?
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade, name: "userRelation")
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   steps   Step[]
-  Comment Comment[]
-  Like    Like[]
+  comment Comment[]
+  like    Like[]
 
   @@map("builds")
 }
@@ -60,9 +60,9 @@ model User {
   id_token         Int?
   picture_url      String?
 
-  Comment Comment[]
-  Build   Build[]   @relation("userRelation")
-  Like    Like[]
+  comment Comment[]
+  build   Build[]
+  like    Like[]
 
   @@map("users")
 }
@@ -83,11 +83,11 @@ model Comment {
 model Like {
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
-  build_id   Int?
+  build_id   Int
   user_id    Int
 
   user  User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  Build Build? @relation(fields: [build_id], references: [id])
+  build Build? @relation(fields: [build_id], references: [id])
 
   @@map("likes")
 }

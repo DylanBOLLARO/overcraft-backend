@@ -28,7 +28,28 @@ export class UserService {
 			where: {
 				id
 			},
-			...this.selectConfig
+			...{
+				select: {
+					...this.selectConfig.select,
+					_count: {
+						select: {
+							build: true,
+							like: true
+						}
+					},
+					build: {
+						include: {
+							_count: {
+								select: {
+									like: true,
+									comment: true,
+									steps: true
+								}
+							}
+						}
+					}
+				}
+			}
 		});
 	}
 
@@ -40,7 +61,28 @@ export class UserService {
 					mode: "insensitive"
 				}
 			},
-			...this.selectConfig
+			...{
+				select: {
+					...this.selectConfig.select,
+					_count: {
+						select: {
+							build: true,
+							like: true
+						}
+					},
+					build: {
+						include: {
+							_count: {
+								select: {
+									like: true,
+									comment: true,
+									steps: true
+								}
+							}
+						}
+					}
+				}
+			}
 		});
 	}
 
