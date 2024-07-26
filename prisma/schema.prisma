@@ -71,11 +71,12 @@ model Comment {
   id         Int      @id @unique @default(autoincrement())
   content    String
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @default(now()) @updatedAt
   build_id   Int
   user_id    Int
-  build      Build    @relation(fields: [build_id], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  build Build @relation(fields: [build_id], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("comments")
 }

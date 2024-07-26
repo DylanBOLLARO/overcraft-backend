@@ -91,7 +91,16 @@ export class UserService {
 			return await this.prismaService.build.findMany({
 				where: {
 					user_id: userId,
-					...(connectedUserId !== userId && { is_public: true })
+					OR: [
+						{
+							is_public: true
+						},
+						{
+							user_id: {
+								equals: connectedUserId
+							}
+						}
+					]
 				}
 			});
 		} catch ({ message }) {
@@ -114,7 +123,16 @@ export class UserService {
 				where: {
 					id: buildId,
 					user_id: userId,
-					...(connectedUserId !== userId && { is_public: true })
+					OR: [
+						{
+							is_public: true
+						},
+						{
+							user_id: {
+								equals: connectedUserId
+							}
+						}
+					]
 				}
 			});
 		} catch ({ message }) {

@@ -42,9 +42,12 @@ export class BuildController {
 		return await this.buildService.findAll();
 	}
 
-	@Get(":id")
-	async findOne(@Param("id") id: string) {
-		return await this.buildService.findOne(+id);
+	@Get(":buildId")
+	async findOne(
+		@GetCurrentUserId() connectedUserId: number,
+		@Param("buildId", ParseIntPipe) buildId: number
+	) {
+		return await this.buildService.findOne(buildId, connectedUserId);
 	}
 
 	@Patch(":id")

@@ -9,6 +9,7 @@ import { StepModule } from "./step/step.module";
 import { UserModule } from "./user/user.module";
 import { LikeModule } from "./like/like.module";
 import { BuildModule } from "./build/build.module";
+import { CommentModule } from './comment/comment.module';
 
 @Module({
 	imports: [
@@ -18,7 +19,8 @@ import { BuildModule } from "./build/build.module";
 		UserModule,
 		AuthModule,
 		LikeModule,
-		BuildModule
+		BuildModule,
+		CommentModule
 	],
 	controllers: [],
 	providers: [

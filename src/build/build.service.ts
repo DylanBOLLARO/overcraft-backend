@@ -42,6 +42,20 @@ export class BuildService {
 			return await this.prismaService.build.findMany({
 				where: {
 					is_public: true
+				},
+				include: {
+					user: {
+						select: {
+							id: true,
+							username: true
+						}
+					},
+					_count: {
+						select: {
+							like: true,
+							comment: true
+						}
+					}
 				}
 			});
 		} catch ({ message }) {
@@ -54,18 +68,32 @@ export class BuildService {
 		}
 	}
 
-	async findOne(id: number) {
+	async findOne(buidId: number, connectedUserId: number) {
 		try {
 			return await this.prismaService.build.findUniqueOrThrow({
 				where: {
-					is_public: true,
-					id
+					id: buidId,
+					OR: [
+						{
+							is_public: true
+						},
+						{
+							user_id: {
+								equals: connectedUserId
+							}
+						}
+					]
 				},
 				include: {
 					user: {
 						select: {
 							id: true,
 							username: true
+						}
+					},
+					_count: {
+						select: {
+							like: true
 						}
 					},
 					steps: true
