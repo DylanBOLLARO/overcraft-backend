@@ -91,9 +91,20 @@ export class BuildService {
 							username: true
 						}
 					},
+					comment: {
+						include: {
+							user: {
+								select: {
+									id: true,
+									username: true
+								}
+							}
+						}
+					},
 					_count: {
 						select: {
-							like: true
+							like: true,
+							comment: true
 						}
 					},
 					steps: true
