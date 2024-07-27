@@ -37,11 +37,40 @@ export class BuildService {
 		}
 	}
 
-	async findAll() {
+	async findAll(params: any) {
+		const { race, v_race, difficulty, type, q } = params;
+
+		const raceUpper = race?.toUpperCase();
+		const vRaceUpper = v_race?.toUpperCase();
+
 		try {
 			return await this.prismaService.build.findMany({
 				where: {
-					is_public: true
+					race: {
+						...(["PROTOSS", "TERRAN", "ZERG"].includes(raceUpper)
+							? { equals: raceUpper }
+							: {})
+					},
+					v_race: {
+						...(["PROTOSS", "TERRAN", "ZERG"].includes(vRaceUpper)
+							? { equals: vRaceUpper }
+							: {})
+					},
+					difficulty: {
+						...(["1", "2", "3"].includes(difficulty)
+							? { equals: +difficulty }
+							: {})
+					},
+					type: {
+						...(["macro", "cheese", "allin"].includes(type)
+							? { equals: type }
+							: {})
+					},
+					title: {
+						...(q.length > 0
+							? { contains: q, mode: "insensitive" }
+							: {})
+					}
 				},
 				include: {
 					user: {

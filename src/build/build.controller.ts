@@ -7,7 +7,8 @@ import {
 	Param,
 	Delete,
 	UseGuards,
-	ParseIntPipe
+	ParseIntPipe,
+	Query
 } from "@nestjs/common";
 import { BuildService } from "./build.service";
 import { CreateBuildDto } from "./dto/create-build.dto";
@@ -38,8 +39,8 @@ export class BuildController {
 	}
 
 	@Get()
-	async findAll() {
-		return await this.buildService.findAll();
+	async findAll(@Query() params: any) {
+		return await this.buildService.findAll(params);
 	}
 
 	@Get(":buildId")
