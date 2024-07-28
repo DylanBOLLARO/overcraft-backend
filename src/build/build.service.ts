@@ -151,6 +151,16 @@ export class BuildService {
 							username: true
 						}
 					},
+					like: {
+						where: {
+							build_id: buidId,
+							user_id: connectedUserId
+						},
+						select: {
+							user_id: true,
+							id: true
+						}
+					},
 					comment: {
 						include: {
 							user: {

@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, UsePipes } from "@nestjs/common";
+import {
+	Controller,
+	Post,
+	Body,
+	UseGuards,
+	UsePipes,
+	Delete,
+	Param
+} from "@nestjs/common";
 import { LikeService } from "./like.service";
 import { Public } from "src/common/decorators";
 import { AtGuard } from "src/common/guards";
@@ -15,5 +23,10 @@ export class LikeController {
 	@Post()
 	create(@Body() createLikeDto: CreateLikeDto) {
 		return this.likeService.create(createLikeDto);
+	}
+
+	@Delete(":id")
+	delete(@Param("id") id: string) {
+		return this.likeService.delete(+id);
 	}
 }

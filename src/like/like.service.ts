@@ -6,9 +6,17 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class LikeService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	create(createLikeDto: CreateLikeDto) {
+	async create(createLikeDto: CreateLikeDto) {
 		return this.prismaService.like.create({
 			data: createLikeDto
+		});
+	}
+
+	async delete(id: number) {
+		return this.prismaService.like.delete({
+			where: {
+				id
+			}
 		});
 	}
 }
