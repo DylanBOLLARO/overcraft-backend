@@ -27,17 +27,6 @@ export class BuildController {
 		return this.buildService.create(createBuildDto);
 	}
 
-	@Get(":buildId/step") // get all steps of one build
-	async findAllStepsOfBuild(
-		@GetCurrentUserId() connectedUserId: number,
-		@Param("buildId", ParseIntPipe) buildId: number
-	) {
-		return await this.buildService.findAllStepsOfBuild(
-			buildId,
-			connectedUserId
-		);
-	}
-
 	@Get()
 	async findAll(@Query() params: any) {
 		return await this.buildService.findAll(params);

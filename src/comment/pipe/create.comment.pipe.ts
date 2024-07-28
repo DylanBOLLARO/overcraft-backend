@@ -25,6 +25,7 @@ export class ValidationPipe implements PipeTransform {
 					);
 				}
 			} catch (error) {
+				console.error(error);
 				throw new BadRequestException("Validation failed");
 			}
 		}

@@ -47,6 +47,7 @@ export class BuildService {
 		try {
 			return await this.prismaService.build.findMany({
 				where: {
+					is_public: true,
 					race: {
 						...(["PROTOSS", "TERRAN", "ZERG"].includes(raceUpper)
 							? { equals: raceUpper }

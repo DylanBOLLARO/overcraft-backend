@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 
@@ -6,9 +6,18 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class CommentService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	create(createCommentDto: CreateCommentDto) {
-		return this.prismaService.comment.create({
-			data: createCommentDto
-		});
+	async create(createCommentDto: CreateCommentDto) {
+		try {
+			return this.prismaService.comment.create({
+				data: createCommentDto
+			});
+		} catch ({ message }) {
+			const err = {
+				statusCode: HttpStatus.CONFLICT,
+				message
+			};
+			console.error(err);
+			throw new ConflictException(err);
+		}
 	}
 }
