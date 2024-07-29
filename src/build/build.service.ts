@@ -186,7 +186,11 @@ export class BuildService {
 							comment: true
 						}
 					},
-					steps: true
+					steps: {
+						orderBy: {
+							position: "asc"
+						}
+					}
 				}
 			});
 		} catch ({ message }) {
