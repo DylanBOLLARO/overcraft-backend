@@ -2,7 +2,6 @@ import { ConflictException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateBuildDto } from "./dto/create-build.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { slugify } from "src/utils";
-import { link } from "fs";
 
 @Injectable()
 export class BuildService {
@@ -39,7 +38,7 @@ export class BuildService {
 	}
 
 	async findAll(params: any) {
-		const { race, v_race, difficulty, type, q, sorted } = params;
+		const { race, v_race, difficulty, type, q, sorted, only_user } = params;
 
 		const raceUpper = race?.toUpperCase();
 		const vRaceUpper = v_race?.toUpperCase();
@@ -47,6 +46,15 @@ export class BuildService {
 		try {
 			return await this.prismaService.build.findMany({
 				where: {
+					like: {
+						...(only_user
+							? {
+									some: {
+										user_id: +only_user
+									}
+							  }
+							: {})
+					},
 					is_public: true,
 					race: {
 						...(["PROTOSS", "TERRAN", "ZERG"].includes(raceUpper)
@@ -74,6 +82,7 @@ export class BuildService {
 							: {})
 					}
 				},
+
 				include: {
 					user: {
 						select: {

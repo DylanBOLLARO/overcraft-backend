@@ -9,7 +9,7 @@ import { StepModule } from "./step/step.module";
 import { UserModule } from "./user/user.module";
 import { LikeModule } from "./like/like.module";
 import { BuildModule } from "./build/build.module";
-import { CommentModule } from './comment/comment.module';
+import { CommentModule } from "./comment/comment.module";
 
 @Module({
 	imports: [
