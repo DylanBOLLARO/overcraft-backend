@@ -1,36 +1,37 @@
-#build
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-COPY prisma ./prisma/
+COPY prisma ./prisma/ 
 
 RUN npm install
 
-RUN npx prisma generate
-
 COPY . .
+
+RUN npx prisma generate
 
 RUN npm run build
 
-
-#production
-FROM node:20-alpine
+FROM node:22-alpine
 
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/dist ./dist
 
+COPY --from=build /usr/src/app/prisma ./prisma
+
 COPY package*.json ./
 
-COPY prisma ./prisma/
+RUN npm install --production
 
-RUN npm install --only=production
+RUN apk add --no-cache bash
 
-RUN npx prisma generate
+EXPOSE 25000
 
-EXPOSE 5000
+RUN adduser -D nodejs
 
-CMD [ "npm", "run", "start:prod" ]
+USER nodejs
+
+CMD ["node", "dist/src/main"]

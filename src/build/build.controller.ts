@@ -13,11 +13,7 @@ import {
 import { BuildService } from "./build.service";
 import { CreateBuildDto } from "./dto/create-build.dto";
 import { UpdateBuildDto } from "./dto/update-build.dto";
-import { GetCurrentUserId, Public } from "src/common/decorators";
-import { AtGuard } from "src/common/guards";
 
-@Public()
-@UseGuards(AtGuard)
 @Controller("build")
 export class BuildController {
 	constructor(private readonly buildService: BuildService) {}
@@ -32,13 +28,12 @@ export class BuildController {
 		return await this.buildService.findAll(params);
 	}
 
-	@Get(":buildId")
-	async findOne(
-		@GetCurrentUserId() connectedUserId: number,
-		@Param("buildId", ParseIntPipe) buildId: number
-	) {
-		return await this.buildService.findOne(buildId, connectedUserId);
-	}
+	// @Get(":buildId")
+	// async findOne(
+	// 	@Param("buildId", ParseIntPipe) buildId: number
+	// ) {
+	// 	return await this.buildService.findOne(buildId, connectedUserId);
+	// }
 
 	@Patch(":id")
 	update(@Param("id") id: string, @Body() updateBuildDto: UpdateBuildDto) {
