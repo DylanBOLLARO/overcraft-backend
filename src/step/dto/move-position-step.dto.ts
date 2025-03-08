@@ -1,20 +1,19 @@
-import { IsEnum, IsNotEmpty, IsNumberString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumberString } from 'class-validator'
 
 export enum MOVE {
-	UP = "UP",
-	DOWN = "DOWN"
+    UP = 'UP',
+    DOWN = 'DOWN',
 }
 
 export class MovePositionStepDto {
-	@IsNotEmpty()
-	@IsNumberString()
-	readonly id: string;
+    @IsNotEmpty()
+    @IsNumberString()
+    readonly id: string
 
-	@IsNotEmpty()
-	@IsNumberString()
-	readonly build_id: string;
+    @IsNotEmpty()
+    readonly buildId: string
 
-	@IsNotEmpty()
-	@IsEnum(MOVE)
-	readonly move: MOVE;
+    @IsNotEmpty()
+    @IsEnum(MOVE)
+    readonly move: MOVE
 }

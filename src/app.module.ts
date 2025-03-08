@@ -5,6 +5,7 @@ import { StepModule } from './step/step.module'
 import { UserModule } from './user/user.module'
 import { BuildModule } from './build/build.module'
 import { PrismaModule } from './prisma/prisma.module'
+import { AuthModule } from './auth/auth.module'
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { PrismaModule } from './prisma/prisma.module'
         StepModule,
         UserModule,
         BuildModule,
+        AuthModule,
     ],
 })
 export class AppModule {

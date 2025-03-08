@@ -12,19 +12,9 @@ import { UserService } from './user.service'
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Get() // get all users
-    findAll() {
-        return this.userService.findAll()
-    }
-
     @Get(':userId') // get one user
-    findOne(@Param('userId', ParseIntPipe) userId: number) {
+    findOne(@Param('userId', ParseIntPipe) userId: string) {
         return this.userService.findOne(userId)
-    }
-
-    @Get('username/:username') // get one user
-    findOneByUsername(@Param('username') username: string) {
-        return this.userService.findOneByUsername(username)
     }
 
     // @Get(':userId/build') // get all builds of one user
@@ -57,7 +47,7 @@ export class UserController {
     // }
 
     @Delete(':userId') // delete one user
-    delete(@Param('userId', ParseIntPipe) userId: number) {
+    delete(@Param('userId', ParseIntPipe) userId: string) {
         return this.userService.delete(userId)
     }
 }

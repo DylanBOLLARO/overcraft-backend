@@ -9,22 +9,22 @@ export class BuildService {
 
 	async create(createBuild: CreateBuildDto) {
 		try {
-			const { user_id } = createBuild;
+			const { userId } = createBuild;
 			const created_build = await this.prismaService.build.create({
 				data: {
 					...createBuild,
-					user_id: +user_id
+					userId,
 				}
 			});
 
-			const { id: build_id, title } = created_build;
+			const { id: buildId, title } = created_build;
 
 			const patch = {
-				user_id: +user_id,
-				slug: slugify(build_id, title)
+				userId,
+				slug: slugify(buildId, title)
 			};
 
-			this.update(build_id, patch);
+			this.update(buildId, patch);
 
 			return { ...created_build, ...patch };
 		} catch ({ message }) {
@@ -46,15 +46,7 @@ export class BuildService {
 		try {
 			return await this.prismaService.build.findMany({
 				where: {
-					like: {
-						...(only_user
-							? {
-									some: {
-										user_id: +only_user
-									}
-							  }
-							: {})
-					},
+
 					is_public: true,
 					race: {
 						...(["PROTOSS", "TERRAN", "ZERG"].includes(raceUpper)
@@ -87,30 +79,11 @@ export class BuildService {
 					user: {
 						select: {
 							id: true,
-							username: true
 						}
 					},
-					_count: {
-						select: {
-							like: true,
-							comment: true
-						}
-					}
+
 				},
-				orderBy: {
-					like: {
-						_count: "desc"
-					}
-				},
-				...(sorted === "mostlike"
-					? {
-							orderBy: {
-								like: {
-									_count: "desc"
-								}
-							}
-					  }
-					: {}),
+
 
 				...(sorted === "mostdifficult"
 					? {
@@ -137,55 +110,22 @@ export class BuildService {
 		}
 	}
 
-	async findOne(buidId: number, connectedUserId: number) {
+	async findOne(buildId: string) {
 		try {
 			return await this.prismaService.build.findUniqueOrThrow({
 				where: {
-					id: buidId,
-					OR: [
-						{
-							is_public: true
-						},
-						{
-							user_id: {
-								equals: connectedUserId
-							}
-						}
-					]
+					id: buildId,
+					is_public: true
+
 				},
 				include: {
 					user: {
 						select: {
 							id: true,
-							username: true
 						}
 					},
-					like: {
-						where: {
-							build_id: buidId,
-							user_id: connectedUserId
-						},
-						select: {
-							user_id: true,
-							id: true
-						}
-					},
-					comment: {
-						include: {
-							user: {
-								select: {
-									id: true,
-									username: true
-								}
-							}
-						}
-					},
-					_count: {
-						select: {
-							like: true,
-							comment: true
-						}
-					},
+
+
 					steps: {
 						orderBy: {
 							position: "asc"
@@ -203,7 +143,7 @@ export class BuildService {
 		}
 	}
 
-	async findAllStepsOfBuild(buildId: number, connectedUserId: number) {
+	async findAllStepsOfBuild(buildId: string, connectedUserId: string) {
 		try {
 			const build = await this.prismaService.build.findUnique({
 				where: {
@@ -217,10 +157,10 @@ export class BuildService {
 				});
 			}
 
-			if (build.is_public || connectedUserId === build.user_id) {
+			if (build.is_public || connectedUserId === build.userId) {
 				return await this.prismaService.step.findMany({
 					where: {
-						build_id: buildId
+						buildId
 					}
 				});
 			} else {
@@ -239,9 +179,9 @@ export class BuildService {
 		}
 	}
 
-	async update(id: number, updateBuildDto: any) {
+	async update(id: string, updateBuildDto: any) {
 		try {
-			const { user_id, is_public } = updateBuildDto;
+			const { userId, is_public } = updateBuildDto;
 
 			return this.prismaService.build.update({
 				where: {
@@ -249,7 +189,7 @@ export class BuildService {
 				},
 				data: {
 					...updateBuildDto,
-					user_id: +user_id,
+					userId,
 					is_public: "" + is_public === "true"
 				}
 			});
@@ -263,7 +203,7 @@ export class BuildService {
 		}
 	}
 
-	async remove(id: number) {
+	async remove(id: string) {
 		return this.prismaService.build.delete({
 			where: {
 				id

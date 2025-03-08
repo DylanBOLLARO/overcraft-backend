@@ -28,6 +28,6 @@ export class StepController {
 
     @Delete(':id')
     delete(@Param('id') id: string) {
-        return this.stepService.delete(+id)
+        return this.stepService.delete(id)
     }
 }

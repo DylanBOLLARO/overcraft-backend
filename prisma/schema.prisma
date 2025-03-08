@@ -7,92 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Build {
-  id          Int      @id @unique @default(autoincrement())
-  title       String   @db.VarChar(150)
-  description String?
-  slug        String?
-  race        Race     @default(NULL)
-  v_race      Race     @default(NULL)
-  is_public   Boolean  @default(false)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  user_id     Int
-  picture_url String?
-  difficulty  Int?
-  type        String?
-
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  steps   Step[]
-  comment Comment[]
-  like    Like[]
-
-  @@map("builds")
-}
-
-model Step {
-  id          Int    @id @unique @default(autoincrement())
-  description String @db.VarChar(150)
-  population  Int
-  timer       Int
-  position    Int
-  build_id    Int
-  build       Build  @relation(fields: [build_id], references: [id], onDelete: Cascade)
-
-  @@map("steps")
-}
-
-model User {
-  id               Int       @id @unique @default(autoincrement())
-  description      String?
-  first_name       String?
-  last_name        String?
-  username         String    @unique
-  email            String    @unique
-  password         String
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @updatedAt
-  role             Role      @default(GUEST)
-  refresh_token    String?
-  access_token     String?
-  token_expires_at DateTime?
-  id_token         Int?
-  picture_url      String?
-
-  comment Comment[]
-  build   Build[]
-  like    Like[]
-
-  @@map("users")
-}
-
-model Comment {
-  id         Int      @id @unique @default(autoincrement())
-  content    String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-  build_id   Int
-  user_id    Int
-
-  build Build @relation(fields: [build_id], references: [id], onDelete: Cascade)
-  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@map("comments")
-}
-
-model Like {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  build_id   Int
-  user_id    Int
-
-  user  User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  build Build? @relation(fields: [build_id], references: [id])
-
-  @@map("likes")
-}
-
 enum Role {
   GUEST
   MEMBER
@@ -105,4 +19,52 @@ enum Race {
   PROTOSS
   NULL
   ALL
+}
+
+model Build {
+  id          String   @id @unique @default(uuid())
+  title       String   @db.VarChar(150)
+  description String?
+  slug        String?
+  race        Race     @default(NULL)
+  v_race      Race     @default(NULL)
+  is_public   Boolean  @default(false)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  userId      String
+  picture_url String?
+  difficulty  Int?
+  type        String?
+
+  steps Step[]
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("builds")
+}
+
+model Step {
+  id          String @id @unique @default(uuid())
+  description String @db.VarChar(150)
+  population  Int
+  timer       Int
+  position    Int
+  buildId     String
+  build       Build  @relation(fields: [buildId], references: [id], onDelete: Cascade)
+
+  @@map("steps")
+}
+
+model User {
+  id                 String   @id @default(uuid())
+  email              String   @unique
+  family_name        String?
+  given_name         String?
+  name               String?
+  preferred_username String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+
+  build Build[]
+
+  @@map("users")
 }

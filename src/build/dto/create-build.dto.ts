@@ -19,5 +19,5 @@ export class CreateBuildDto {
 
 	@IsNotEmpty()
 	@IsNumberString()
-	readonly user_id: number;
+	readonly userId: string;
 }
