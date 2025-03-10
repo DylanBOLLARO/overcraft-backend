@@ -65,7 +65,6 @@ export class StepService {
 
     async movePosition(movePositionStep: MovePositionStepDto) {
         const { id, buildId, move } = movePositionStep
-
         try {
             const init_step = await this.prismaService.step.findFirstOrThrow({
                 where: {

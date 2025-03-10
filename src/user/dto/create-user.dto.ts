@@ -16,4 +16,7 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     readonly last_name: string
+
+    @IsNotEmpty()
+    readonly id: string
 }

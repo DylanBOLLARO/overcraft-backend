@@ -7,7 +7,6 @@ export enum MOVE {
 
 export class MovePositionStepDto {
     @IsNotEmpty()
-    @IsNumberString()
     readonly id: string
 
     @IsNotEmpty()

@@ -23,7 +23,7 @@ enum Race {
 
 model Build {
   id          String   @id @unique @default(uuid())
-  title       String   @db.VarChar(150)
+  name        String   @db.VarChar(150)
   description String?
   slug        String?
   race        Race     @default(NULL)
@@ -55,7 +55,7 @@ model Step {
 }
 
 model User {
-  id                 String   @id @default(uuid())
+  id                 String   @unique
   email              String   @unique
   family_name        String?
   given_name         String?

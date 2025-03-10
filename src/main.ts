@@ -3,6 +3,7 @@ import { AppModule } from './app.module'
 import { ValidationPipe } from '@nestjs/common/pipes'
 import * as session from 'express-session'
 import * as passport from 'passport'
+import * as cookieParser from 'cookie-parser'
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
@@ -14,16 +15,18 @@ async function bootstrap() {
         credentials: true,
     })
 
+    app.use(cookieParser())
+
     // Authentication & Session
     app.use(
         session({
-            secret: process.env.SESSION_SECRET, // to sign session id
-            resave: false, // will default to false in near future: https://github.com/expressjs/session#resave
-            saveUninitialized: false, // will default to false in near future: https://github.com/expressjs/session#saveuninitialized
-            rolling: true, // keep session alive
+            secret: process.env.SESSION_SECRET,
+            resave: false,
+            saveUninitialized: false,
+            rolling: true,
             cookie: {
-                maxAge: 30 * 60 * 1000, // session expires in 1hr, refreshed by `rolling: true` option.
-                httpOnly: true, // so that cookie can't be accessed via client-side script
+                maxAge: 30 * 60 * 1000,
+                httpOnly: true,
             },
         })
     )

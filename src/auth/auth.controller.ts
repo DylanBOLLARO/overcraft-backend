@@ -4,43 +4,44 @@ import { Response } from 'express'
 
 import { LoginGuard } from './login.guard'
 import { Issuer } from 'openid-client'
-import { UserService } from 'src/user/user.service'
+import { PrismaService } from 'src/prisma/prisma.service'
 
 @Controller()
 export class AuthController {
-    constructor(private readonly userService: UserService) {}
-
-    private createUser = async (data: any) => {
-        return await this.userService.create(data)
-    }
-
-    private doesUserExist = async (email: string) => {
-        return await this.userService.findOne(email)
-    }
+    constructor(private readonly prismaService: PrismaService) {}
 
     @UseGuards(LoginGuard)
-    @Get('/login')
+    @Get('/auth/login')
     login() {}
 
-    @Get('/user')
+    @Get('/auth/user')
     async user(@Request() req) {
-        if (!req.user) return
+        const userId = req?.user?.userinfo?.sub ?? null
 
-        let userExist: any = await this.doesUserExist(
-            req?.user?.userinfo?.email
-        )
-        if (!userExist && req?.user?.userinfo) {
+        if (!userId) return
+
+        let userExist: any = await this.prismaService.user.findUnique({
+            where: {
+                id: userId,
+            },
+        })
+
+        if (!userExist) {
             const { name, family_name, given_name, preferred_username, email } =
                 req?.user?.userinfo
 
-            userExist = await this.createUser({
-                email,
-                name,
-                family_name,
-                given_name,
-                preferred_username,
+            userExist = await this.prismaService.user.create({
+                data: {
+                    email,
+                    name,
+                    family_name,
+                    given_name,
+                    preferred_username,
+                    id: userId,
+                },
             })
         }
+
         return {
             ...req.user,
             userinfo: { ...req.user.userinfo, ...userExist },
@@ -53,7 +54,7 @@ export class AuthController {
         res.redirect('http://localhost:3000')
     }
 
-    @Get('/logout')
+    @Get('/auth/logout')
     async logout(@Request() req, @Res() res: Response) {
         const id_token = req.user ? req.user.id_token : undefined
 

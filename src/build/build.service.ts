@@ -1,30 +1,32 @@
 import { ConflictException, HttpStatus, Injectable } from "@nestjs/common";
-import { CreateBuildDto } from "./dto/create-build.dto";
 import { PrismaService } from "src/prisma/prisma.service";
-import { slugify } from "src/utils";
 
 @Injectable()
 export class BuildService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async create(createBuild: CreateBuildDto) {
+	private readonly slugify= (id: string | string, str: string) => {
+		str = str.replace(/^\s+|\s+$/g, '')
+		str = str.toLowerCase()
+		str = str.replace(/[^a-z0-9 -]/g, '')
+		str = str.replace(/\s+/g, '-')
+		str = str.replace(/-+/g, '-')
+		return `${id}-${str}`
+	}
+	
+	async create(createBuild: any) {
 		try {
-			const { userId } = createBuild;
 			const created_build = await this.prismaService.build.create({
-				data: {
-					...createBuild,
-					userId,
-				}
+				data: {...createBuild, difficulty:+createBuild.difficulty}
 			});
 
-			const { id: buildId, title } = created_build;
+			const { id, name } = created_build;
 
 			const patch = {
-				userId,
-				slug: slugify(buildId, title)
+				slug: this.slugify(id, name)
 			};
 
-			this.update(buildId, patch);
+			this.update(id, patch);
 
 			return { ...created_build, ...patch };
 		} catch ({ message }) {
@@ -38,7 +40,7 @@ export class BuildService {
 	}
 
 	async findAll(params: any) {
-		const { race, v_race, difficulty, type, q, sorted, only_user } = params;
+		const { race, v_race, difficulty, type, q, sorted } = params;
 
 		const raceUpper = race?.toUpperCase();
 		const vRaceUpper = v_race?.toUpperCase();
@@ -46,7 +48,6 @@ export class BuildService {
 		try {
 			return await this.prismaService.build.findMany({
 				where: {
-
 					is_public: true,
 					race: {
 						...(["PROTOSS", "TERRAN", "ZERG"].includes(raceUpper)
@@ -68,13 +69,12 @@ export class BuildService {
 							? { equals: type }
 							: {})
 					},
-					title: {
+					name: {
 						...(q.length > 0
 							? { contains: q, mode: "insensitive" }
 							: {})
 					}
 				},
-
 				include: {
 					user: {
 						select: {
@@ -83,7 +83,6 @@ export class BuildService {
 					},
 
 				},
-
 
 				...(sorted === "mostdifficult"
 					? {
@@ -110,22 +109,17 @@ export class BuildService {
 		}
 	}
 
-	async findOne(buildId: string) {
+	async findOne(userId:string, buildId: string) {
 		try {
-			return await this.prismaService.build.findUniqueOrThrow({
+			return await this.prismaService.build.findUnique({
 				where: {
 					id: buildId,
-					is_public: true
-
+					OR:[
+						{is_public:true},
+						{ ...(userId ? { userId } : {}) }
+					]
 				},
 				include: {
-					user: {
-						select: {
-							id: true,
-						}
-					},
-
-
 					steps: {
 						orderBy: {
 							position: "asc"

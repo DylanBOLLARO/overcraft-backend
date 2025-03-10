@@ -1,9 +1,9 @@
 import { Race } from "@prisma/client";
-import { IsNotEmpty, IsNumberString } from "class-validator";
+import { IsNotEmpty, IsNumberString, IsOptional } from "class-validator";
 
 export class CreateBuildDto {
 	@IsNotEmpty()
-	readonly title: string;
+	readonly name: string;
 
 	@IsNotEmpty()
 	readonly description: string;
@@ -12,12 +12,12 @@ export class CreateBuildDto {
 	readonly race: Race;
 
 	@IsNotEmpty()
+	@IsOptional()
 	readonly v_race: Race;
 
-	@IsNotEmpty()
-	readonly slug: string;
+	@IsOptional()
+	readonly slug?: string;
 
 	@IsNotEmpty()
-	@IsNumberString()
 	readonly userId: string;
 }
