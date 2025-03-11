@@ -19,7 +19,7 @@
 		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
 		"test:e2e": "jest --config ./test/jest-e2e.json",
 		"prettier": "npx prettier . --write",
-		"init-setup": "npx prisma db push --force-reset && npx prisma db seed && npm run dev"
+		"init-setup": "npx prisma db push --force-reset && npx prisma db seed"
 	},
 	"dependencies": {
 		"@nestjs/common": "^11.0.11",
