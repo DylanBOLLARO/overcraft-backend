@@ -51,7 +51,10 @@ export class AuthController {
     @UseGuards(LoginGuard)
     @Get('/callback')
     loginCallback(@Res() res: Response) {
-        res.redirect('http://localhost:3000')
+        res.redirect(
+            process.env
+                .OAUTH2_CLIENT_REGISTRATION_LOGIN_POST_LOGOUT_REDIRECT_URI
+        )
     }
 
     @Get('/auth/logout')
