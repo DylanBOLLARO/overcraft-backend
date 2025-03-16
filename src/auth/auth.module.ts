@@ -13,7 +13,7 @@ import { UserService } from 'src/user/user.service'
 const OidcStrategyFactory = {
     provide: 'OidcStrategy',
     useFactory: async (authService: AuthService) => {
-        const client = await buildOpenIdClient() // secret sauce! build the dynamic client before injecting it into the strategy for use in the constructor super call.
+        const client = await buildOpenIdClient()
         const strategy = new OidcStrategy(authService, client)
         return strategy
     },

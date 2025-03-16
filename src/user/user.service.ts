@@ -16,7 +16,7 @@ export class UserService {
                 id: userId,
             },
             include: {
-                build: true,
+                builds: true,
             },
         })
     }

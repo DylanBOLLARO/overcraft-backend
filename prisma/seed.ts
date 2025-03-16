@@ -13,11 +13,11 @@ export function slugify(id: string | string, str: string) {
 
 async function main() {
     const createBuild = async (build: any) => {
-        const { id: buildId, name } = await prisma.build.create({
+        const { id: buildId, name } = await prisma.builds.create({
             data: build,
         })
 
-        await prisma.build.update({
+        await prisma.builds.update({
             where: {
                 id: buildId,
             },
