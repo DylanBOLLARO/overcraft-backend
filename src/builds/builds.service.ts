@@ -1,10 +1,15 @@
 import { ConflictException, HttpStatus, Injectable } from '@nestjs/common'
 import { ResponseFormat } from 'src/constants'
 import { PrismaService } from 'src/prisma/prisma.service'
+import * as _ from 'lodash'
+import { StepService } from 'src/step/step.service'
 
 @Injectable()
 export class BuildsService {
-    constructor(private readonly prismaService: PrismaService) {}
+    constructor(
+        private readonly prismaService: PrismaService,
+        private readonly stepsService: StepService
+    ) {}
 
     private readonly slugify = (id: string | string, str: string) => {
         str = str.replace(/^\s+|\s+$/g, '')
@@ -15,10 +20,10 @@ export class BuildsService {
         return `${id}-${str}`
     }
 
-    async create(createBuild: any) {
+    async create(build: any) {
         try {
             const created_build = await this.prismaService.builds.create({
-                data: { ...createBuild, difficulty: +createBuild.difficulty },
+                data: { ...build, difficulty: +build.difficulty },
             })
 
             const { id, name } = created_build
@@ -27,7 +32,7 @@ export class BuildsService {
                 slug: this.slugify(id, name),
             }
 
-            this.update(id, patch)
+            await this.update(id, patch)
 
             return { ...created_build, ...patch }
         } catch ({ message }) {
@@ -38,6 +43,24 @@ export class BuildsService {
             console.error(err)
             throw new ConflictException(err)
         }
+    }
+
+    async importBuild(build: any) {
+        const buildProperties: any = _.omit(build, ['steps'])
+        const buildSteps: Array<any> = _.pick(build, ['steps']).steps
+        const createdBuild = await this.create(buildProperties)
+        console.log({ createdBuild })
+        const { id: buildId } = createdBuild
+
+        for await (const step of buildSteps) {
+            await this.stepsService.create({ ...step, buildId })
+        }
+
+        return await this.prismaService.builds.findUnique({
+            where: {
+                id: buildId,
+            },
+        })
     }
 
     async findAll(params: any) {

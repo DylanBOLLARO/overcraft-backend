@@ -14,6 +14,7 @@ import { UpdateBuildDto } from './dto/update-builds.dto'
 import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard'
 import { GetCurrentUserId } from 'src/common/decorators'
 import { BuildsService } from './builds.service'
+import * as _ from 'lodash'
 
 @Controller('builds')
 export class BuildController {
@@ -23,6 +24,12 @@ export class BuildController {
     @Post()
     create(@Body() createBuildDto: CreateBuildDto) {
         return this.buildsService.create(createBuildDto)
+    }
+
+    @UseGuards(AuthenticatedGuard)
+    @Post('import-build')
+    importBuild(@Body() createBuildDto: CreateBuildDto) {
+        return this.buildsService.importBuild(createBuildDto)
     }
 
     @Get()

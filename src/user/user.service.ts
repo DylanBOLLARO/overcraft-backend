@@ -21,6 +21,14 @@ export class UserService {
         })
     }
 
+    async findAllBuildsOfUser(userId: string) {
+        return await this.prismaService.builds.findMany({
+            where: {
+                userId,
+            },
+        })
+    }
+
     async update(id: string, updateEmployee: Prisma.UserUpdateInput) {
         return this.prismaService.user.update({
             where: {

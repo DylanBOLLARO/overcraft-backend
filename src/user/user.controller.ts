@@ -11,4 +11,9 @@ export class UserController {
     findOne(@Param('userId') userId: string) {
         return this.userService.findOne(userId)
     }
+
+    @Get(':userId/builds')
+    findAll(@Param('userId') userId: string) {
+        return this.userService.findAllBuildsOfUser(userId)
+    }
 }

@@ -1,5 +1,5 @@
 import { Race } from '@prisma/client'
-import { IsNotEmpty, IsNumberString, IsOptional } from 'class-validator'
+import { IsNotEmpty, IsOptional } from 'class-validator'
 
 export class CreateBuildDto {
     @IsNotEmpty()
@@ -20,4 +20,7 @@ export class CreateBuildDto {
 
     @IsNotEmpty()
     readonly userId: string
+
+    @IsOptional()
+    readonly steps?: string
 }

@@ -24,6 +24,13 @@ export class AuthController {
             where: {
                 id: userId,
             },
+            include: {
+                builds: {
+                    select: {
+                        id: true,
+                    },
+                },
+            },
         })
 
         if (!userExist) {
