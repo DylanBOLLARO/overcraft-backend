@@ -49,7 +49,6 @@ export class BuildsService {
         const buildProperties: any = _.omit(build, ['steps'])
         const buildSteps: Array<any> = _.pick(build, ['steps']).steps
         const createdBuild = await this.create(buildProperties)
-        console.log({ createdBuild })
         const { id: buildId } = createdBuild
 
         for await (const step of buildSteps) {
