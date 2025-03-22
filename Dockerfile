@@ -28,7 +28,7 @@ RUN npm install --production
 
 RUN apk add --no-cache bash
 
-EXPOSE 25000
+EXPOSE 5000
 
 RUN adduser -D nodejs
 
