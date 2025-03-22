@@ -21,19 +21,24 @@ enum Race {
   ALL
 }
 
+enum StepVariants {
+  BUILDING
+  UNIT
+  GAZ
+  INFO
+}
+
 model Builds {
   id          String   @id @unique @default(uuid())
-  name        String   @db.VarChar(150)
+  name        String
   description String?
   slug        String?
-  race        Race     @default(NULL)
-  v_race      Race     @default(NULL)
-  is_public   Boolean  @default(false)
+  race        Race
+  v_race      Race
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  picture_url String?
-  difficulty  Int?
-  type        String?
+  is_public   Boolean  @default(false)
+  featured    Boolean  @default(false)
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -56,13 +61,14 @@ model Favorites {
 }
 
 model Step {
-  id          String @id @unique @default(uuid())
-  description String @db.VarChar(150)
+  id          String       @id @unique @default(uuid())
+  description String       @db.VarChar(150)
   population  Int
   timer       Int
   position    Int
+  variant     StepVariants @default(INFO)
   buildId     String
-  builds      Builds @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  builds      Builds       @relation(fields: [buildId], references: [id], onDelete: Cascade)
 
   @@map("steps")
 }

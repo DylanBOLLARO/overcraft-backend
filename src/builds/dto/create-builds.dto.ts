@@ -12,7 +12,6 @@ export class CreateBuildDto {
     readonly race: Race
 
     @IsNotEmpty()
-    @IsOptional()
     readonly v_race: Race
 
     @IsOptional()

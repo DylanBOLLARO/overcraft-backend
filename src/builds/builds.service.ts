@@ -23,7 +23,7 @@ export class BuildsService {
     async create(build: any) {
         try {
             const created_build = await this.prismaService.builds.create({
-                data: { ...build, difficulty: +build.difficulty },
+                data: build,
             })
 
             const { id, name } = created_build
