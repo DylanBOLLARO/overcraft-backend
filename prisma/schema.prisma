@@ -31,15 +31,28 @@ model Builds {
   is_public   Boolean  @default(false)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  userId      String
   picture_url String?
   difficulty  Int?
   type        String?
 
-  steps Step[]
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  steps     Step[]
+  favorites Favorites[]
 
   @@map("builds")
+}
+
+model Favorites {
+  id      String @id @unique @default(uuid())
+  buildId String
+  userId  String
+
+  builds Builds @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("favorites")
 }
 
 model Step {
@@ -64,7 +77,8 @@ model User {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @default(now()) @updatedAt
 
-  builds Builds[]
+  builds    Builds[]
+  favorites Favorites[]
 
   @@map("users")
 }

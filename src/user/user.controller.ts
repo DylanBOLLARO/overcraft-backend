@@ -7,13 +7,13 @@ import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard'
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Get(':userId')
-    findOne(@Param('userId') userId: string) {
-        return this.userService.findOne(userId)
+    @Get(':userId/builds')
+    async findAllBuilds(@Param('userId') userId: string) {
+        return await this.userService.findAllBuildsOfUser(userId)
     }
 
-    @Get(':userId/builds')
-    findAll(@Param('userId') userId: string) {
-        return this.userService.findAllBuildsOfUser(userId)
+    @Get(':userId/favorites')
+    async findAllFavorites(@Param('userId') userId: string) {
+        return await this.userService.findAllFavorites(userId)
     }
 }

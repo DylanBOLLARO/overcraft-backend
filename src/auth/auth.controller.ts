@@ -30,6 +30,12 @@ export class AuthController {
                         id: true,
                     },
                 },
+                favorites: {
+                    select: {
+                        buildId: true,
+                        id: true,
+                    },
+                },
             },
         })
 
