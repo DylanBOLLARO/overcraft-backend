@@ -1,21 +1,22 @@
-import { IsNotEmpty, IsNumberString } from 'class-validator'
+import { StepVariants } from '@prisma/client'
+import { IsNotEmpty, IsOptional } from 'class-validator'
 
 export class CreateStepDto {
     @IsNotEmpty()
     readonly description: string
 
     @IsNotEmpty()
-    @IsNumberString()
-    readonly population: string
+    readonly population: number
 
     @IsNotEmpty()
-    @IsNumberString()
-    readonly timer: string
+    readonly timer: number
 
     @IsNotEmpty()
     readonly buildId: string
 
     @IsNotEmpty()
-    @IsNumberString()
-    readonly position: string
+    readonly position: number
+
+    @IsOptional()
+    readonly variant: StepVariants
 }

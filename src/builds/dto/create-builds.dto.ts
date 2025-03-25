@@ -1,4 +1,4 @@
-import { Race } from '@prisma/client'
+import { Race, StepVariants } from '@prisma/client'
 import { IsNotEmpty, IsOptional } from 'class-validator'
 
 export class CreateBuildDto {
@@ -22,4 +22,7 @@ export class CreateBuildDto {
 
     @IsOptional()
     readonly steps?: string
+
+    @IsOptional()
+    readonly variant: string
 }

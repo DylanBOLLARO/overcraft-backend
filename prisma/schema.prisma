@@ -26,6 +26,9 @@ enum StepVariants {
   UNIT
   GAZ
   INFO
+  SUPPLY
+  ATTACK
+  UPGRADE
 }
 
 model Builds {

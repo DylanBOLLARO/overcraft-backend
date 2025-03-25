@@ -8,6 +8,7 @@ import { CreateStepDto } from './dto/create-step.dto'
 import { UpdateStepDto } from './dto/update-step.dto'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { MOVE, MovePositionStepDto } from './dto/move-position-step.dto'
+import * as _ from 'lodash'
 
 @Injectable()
 export class StepService {
@@ -20,7 +21,7 @@ export class StepService {
     async create(createStep: CreateStepDto) {
         const { buildId, position, timer, population } = createStep
 
-        await this.prismaService.step.create({
+        return await this.prismaService.step.create({
             data: {
                 ...createStep,
                 buildId,
@@ -48,23 +49,122 @@ export class StepService {
     }
 
     async update(id: string, updateStep: UpdateStepDto) {
-        const { buildId, position, timer, population } = updateStep
         await this.prismaService.step.update({
             where: {
                 id,
             },
-            data: {
-                ...updateStep,
-                buildId,
-                position: +position,
-                timer: +timer,
-                population: +population,
-            },
+            data: updateStep,
         })
+    }
+
+    private readonly getIdExchange = async (data: any) => {
+        try {
+            const { position, move, buildId } = data
+            if (position <= 0 && move === 'UP') return
+
+            const maxPosition =
+                (await this.prismaService.step.count({
+                    where: {
+                        buildId,
+                    },
+                })) - 1
+
+            if (position >= maxPosition && move === 'DOWN') return
+
+            let highestPosition = null
+            let lowestPosition = null
+
+            if (move == 'UP') {
+                highestPosition = position - 1
+                lowestPosition = position
+            } else {
+                highestPosition = position
+                lowestPosition = position + 1
+            }
+
+            const task1 = await this.prismaService.step.findFirstOrThrow({
+                where: {
+                    buildId,
+                    position: highestPosition,
+                },
+            })
+
+            const task2 = await this.prismaService.step.findFirstOrThrow({
+                where: {
+                    buildId,
+                    position: lowestPosition,
+                },
+            })
+
+            await this.prismaService.$transaction([
+                this.prismaService.step.update({
+                    where: { id: task1.id },
+                    data: { position: task2.position },
+                }),
+                this.prismaService.step.update({
+                    where: { id: task2.id },
+                    data: { position: task1.position },
+                }),
+            ])
+        } catch (error) {
+            console.error(error)
+        } finally {
+            await this.prismaService.$disconnect()
+        }
     }
 
     async movePosition(movePositionStep: MovePositionStepDto) {
         const { id, buildId, move } = movePositionStep
+
+        const { position } =
+            (await this.prismaService.step.findUnique({
+                where: {
+                    id,
+                },
+            })) || {}
+
+        if (_.isNil(position)) return
+
+        await this.getIdExchange({ id, position, move, buildId })
+
+        return
+        function transfer() {
+            return this.prismaService.$transaction(async (tx: any) => {
+                // 1. Decrement amount from the sender.
+                // const sender = await tx.account.update({
+                //     data: {
+                //         balance: {
+                //             decrement: amount,
+                //         },
+                //     },
+                //     where: {
+                //         email: from,
+                //     },
+                // })
+                // 2. Verify that the sender's balance didn't go below zero.
+                // if (sender.balance < 0) {
+                //     throw new Error(
+                //         `${from} doesn't have enough to send ${amount}`
+                //     )
+                // }
+                // 3. Increment the recipient's balance by amount
+                // const recipient = await tx.account.update({
+                //     data: {
+                //         balance: {
+                //             increment: amount,
+                //         },
+                //     },
+                //     where: {
+                //         email: to,
+                //     },
+                // })
+                // return recipient
+            })
+        }
+
+        transfer()
+        return
+
         try {
             const init_step = await this.prismaService.step.findFirstOrThrow({
                 where: {
