@@ -85,6 +85,7 @@ model User {
   preferred_username String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @default(now()) @updatedAt
+  colorPreferences   Json?
 
   builds    Builds[]
   favorites Favorites[]

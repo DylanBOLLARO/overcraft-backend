@@ -24,4 +24,15 @@ export class UserService {
             },
         })
     }
+
+    async patchProfile(id: string, profile: any) {
+        return await this.prismaService.user.update({
+            where: {
+                id,
+            },
+            data: {
+                colorPreferences: profile,
+            },
+        })
+    }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common'
 import { UserService } from './user.service'
 import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard'
 
@@ -15,5 +15,10 @@ export class UserController {
     @Get(':userId/favorites')
     async findAllFavorites(@Param('userId') userId: string) {
         return await this.userService.findAllFavorites(userId)
+    }
+
+    @Patch(':id')
+    async update(@Param('id') id: string, @Body() profile: any) {
+        return await this.userService.patchProfile(id, profile)
     }
 }
